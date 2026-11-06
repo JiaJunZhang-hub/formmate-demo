@@ -1,5 +1,5 @@
 import { SCREENS, createState, reduce, initialScreen } from './state.mjs';
-import { renderScreen, renderTabs } from './views.mjs';
+import { renderScreen, renderTabs } from './views.mjs?v=20261106-natural-2';
 
 let state = createState();
 let ui = { unassessable: false, busy: false };

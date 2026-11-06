@@ -1,5 +1,5 @@
 import { RECOVERY_SAMPLES, DAILY_PLANS, LIVE_SAMPLES, recoveryProposal, currentDailyPlan, liveReading } from './premium.mjs';
-import { escapeHtml as e } from './illustrations.mjs';
+import { escapeHtml as e } from './illustrations.mjs?v=20261106-natural-2';
 
 const btn = (text, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${text}</button>`;
 const go = (text, id, cls = 'primary') => btn(text, 'navigate', id, cls);

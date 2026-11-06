@@ -1,6 +1,6 @@
 import { SCREENS, COACHES, FOCUSES, EXERCISES, getCoach, getExercise, recommendation } from './state.mjs';
-import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs';
-import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs';
+import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs?v=20261106-natural-2';
+import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs?v=20261106-natural-2';
 
 export const button = (label, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${label}</button>`;
 const go = (label, screen, cls = 'primary') => button(label, 'navigate', screen, cls);
