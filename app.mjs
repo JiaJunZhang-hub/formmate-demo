@@ -1,7 +1,8 @@
-import { getComparison, nextPhase } from './demo.mjs';
+import { getComparison, nextPhase, recommendTrainer } from './demo.mjs?v=20261106-self-check';
 
 let trainerId = 'mina';
 let practiceId = 'form';
+let trainerChoice = 'recommended';
 let hasFeedback = false;
 let phase = 0;
 let playbackTimer = null;
@@ -18,7 +19,7 @@ const CONCEPTS = Object.freeze([
   Object.freeze({ title: ['ジムに行かなくても、', '正しく鍛えられる。'], description: '自宅でできる、あなたに合ったトレーニングをAIが提案。\n人目を気にせず、今日から始められます。', solution: '道具・場所・時間に合わせて、自宅でできる練習を提案。', footnote: ['道具がなくても、今日から動ける。', 'お手本と比べて、次の一歩が分かる。'] }),
   Object.freeze({ title: ['運動初心者のための、', '最初のトレーニング。'], description: '目的や今のレベルをもとに、AIが最初に試すトレーニングを提案します。\n迷ったら、トレーナーにも確認できます。', solution: '初心者でも取り組みやすい、最初の一種目を提案。', footnote: ['はじめてだからこそ、分かりやすく。', '迷ったら、トレーナーに確認できる。'] }),
   Object.freeze({ title: ['誰にも見られず、', '誰にも置いていかれない。'], description: 'AIの提案で自分のペースから始めて、必要なときはプロに相談できます。\nひとりの練習を、ひとりの悩みにしません。', solution: '人目を気にせず進められる、無理のないステップを提案。', footnote: ['ひとりの時間も、ひとりきりにしない。', '必要なときだけ、トレーナーとつながる。'] }),
-  Object.freeze({ title: ['あなたの「今」に合う', '運動を。'], description: '現在のレベルをAIと一緒に整理して、無理のないトレーニングを始めよう。\nできることから、少しずつ。', solution: '今のレベルに合わせて、背伸びをしない練習を提案。', footnote: ['上手な人ではなく、今の自分から。', 'できることが分かると、続けやすい。'] }),
+  Object.freeze({ title: ['あなたの「今」に合う', '運動を。'], description: 'まずは、スマホで自分の動きを知ることから。\n今の状態と目的に合う練習・トレーナーの提案で、最初の一歩へ。', solution: '動作チェックで確認できる特徴と目的から、練習とお手本を提案。', footnote: ['上手な人ではなく、今の自分から。', 'できることが分かると、続けやすい。'] }),
   Object.freeze({ title: ['正しいか不安なまま、', '続けなくていい。'], description: 'AIが次に意識するポイントを提案し、トレーナーにも確認できます。\n自宅で安心して続けられます。', solution: '動きの比較から、次の一回で意識するポイントを提案。', footnote: ['やり方に迷ったら、いつでも確認。', '安心できる一回が、次の一回につながる。'] }),
   Object.freeze({ title: ['通わない。迷わない。', 'ひとりで始められる。'], description: 'FormMateのAI提案が、自宅トレーニングの最初の一歩を支えます。\n準備に時間をかけず、すぐに始められます。', solution: '通う前の準備を減らし、今日できる練習を提案。', footnote: ['忙しい毎日に、通わない選択肢を。', '自宅ではじめる、あなたの習慣づくり。'] }),
   Object.freeze({ title: ['三日坊主のための、', '続けやすいトレーニング。'], description: 'AIが小さく始められる練習を提案し、成長を確かめながら続けられます。\n頑張りすぎないことから。', solution: 'その日の負担に合わせて、続けやすい小さな練習を提案。', footnote: ['続けることが苦手でも、始められる。', '小さな「できた」を、毎日の目印に。'] }),
@@ -78,6 +79,9 @@ function renderIntroConcept(index) {
 function renderComparison() {
   const comparison = getComparison(trainerId, phase, practiceId);
   const { trainer } = comparison;
+  const recommendation = recommendTrainer(practiceId);
+  document.querySelector('#recommendation-mode').textContent = trainerChoice === 'recommended' ? '目的に合わせたおすすめ' : 'あなたが選び直したお手本';
+  document.querySelector('#trainer-recommendation-reason').textContent = trainerChoice === 'recommended' ? recommendation.reason : `${trainer.name}のお手本に変更しました。目的はそのままに、指導スタイルを比べられます。おすすめは${recommendation.trainer.name}です。`;
   for (const button of practiceButtons) {
     const selected = button.dataset.practice === practiceId;
     button.setAttribute('aria-pressed', String(selected));
@@ -126,6 +130,7 @@ function advancePhase() {
 trainerButtons.forEach((button) => button.addEventListener('click', () => {
   stopPlayback();
   trainerId = button.dataset.trainer;
+  trainerChoice = 'manual';
   hasFeedback = false;
   phase = 0;
   renderComparison();
@@ -134,6 +139,8 @@ trainerButtons.forEach((button) => button.addEventListener('click', () => {
 practiceButtons.forEach((button) => button.addEventListener('click', () => {
   stopPlayback();
   practiceId = button.dataset.practice;
+  trainerId = recommendTrainer(practiceId).trainer.id;
+  trainerChoice = 'recommended';
   hasFeedback = false;
   phase = 0;
   renderComparison();

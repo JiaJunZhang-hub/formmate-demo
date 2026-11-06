@@ -13,6 +13,18 @@ export const PRACTICE_TYPES = Object.freeze([
   Object.freeze({ id: 'rhythm', name: 'リズムを整える', point: '動く速さ・切り替えのタイミング', description: 'お手本のペースと、動くタイミングに注目。', cues: Object.freeze(['お手本が動き始めるタイミングを確認。', '下がる場面のペースを、再生で見比べよう。', '下がる動きから戻る動きへの切り替えに注目。']), advice: '再生と一時停止を使い、自分に合うペースを考えよう。' }),
 ]);
 
+const TRAINER_RECOMMENDATIONS = Object.freeze({
+  form: { trainerId: 'mina', reason: 'フォームを整えたい目的に合わせて、基本の姿勢や位置をていねいに見るMINAのお手本をおすすめします。' },
+  control: { trainerId: 'ryo', reason: '動きを安定させたい目的に合わせて、自重の基本動作を自分のペースで確認するRYOのお手本をおすすめします。' },
+  rhythm: { trainerId: 'haru', reason: 'リズムを整えたい目的に合わせて、ゆっくりした動作と習慣づくりを大切にするHARUのお手本をおすすめします。' },
+});
+
+export function recommendTrainer(practiceId) {
+  if (!Object.hasOwn(TRAINER_RECOMMENDATIONS, practiceId)) throw new RangeError(`Unknown sample practice type: ${practiceId}`);
+  const recommendation = TRAINER_RECOMMENDATIONS[practiceId];
+  return { trainer: TRAINERS.find(({ id }) => id === recommendation.trainerId), reason: recommendation.reason, isSample: true };
+}
+
 export function getComparison(trainerId = 'mina', phase = 0, practiceId = 'form') {
   const trainer = TRAINERS.find((entry) => entry.id === trainerId);
   if (!trainer) throw new RangeError(`Unknown sample trainer: ${trainerId}`);

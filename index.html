@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f5ed">
-  <meta name="description" content="あなたの今のレベルに合う運動を、AIが提案。FormMateは、お手本との比較やトレーナーへの確認で、自宅の一歩を無理なく支えます。">
+  <meta name="description" content="まずはスマホで自分の動きを知ることから。FormMateは今の状態と目的に合う練習・トレーナーの提案、お手本との比較で、最初の一歩を支えるサービス構想です。">
   <title>フォームメイト / FormMate — あなたの「今」に合う運動を。</title>
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./practice.css">
   <link rel="stylesheet" href="./motivation.css">
-  <script type="module" src="./app.mjs"></script>
+  <link rel="stylesheet" href="./assessment.css?v=20261106-self-check">
+  <script type="module" src="./app.mjs?v=20261106-self-check"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-testid="skip-link">本文へ移動</a>
@@ -35,7 +36,7 @@
       <div class="hero-copy">
         <p class="eyebrow"><span class="status-dot"></span> MOVE AT YOUR OWN PACE</p>
         <h1 id="hero-title"><span id="hero-title-line-one">あなたの「今」に合う</span><br><span id="hero-title-line-two" class="underlined">運動を。</span></h1>
-        <p id="hero-description" class="hero-description">現在のレベルをAIと一緒に整理して、無理のないトレーニングを始めよう。<br>できることから、少しずつ。</p>
+        <p id="hero-description" class="hero-description">まずは、スマホで自分の動きを知ることから。<br>今の状態と目的に合う練習・トレーナーの提案で、お手本との比較へ。</p>
         <div class="hero-actions"><a class="button" href="#demo" data-testid="hero-demo">フォームメイトを体験する <span aria-hidden="true">↗</span></a><a class="quiet-label" href="./mobile/" data-testid="mobile-mock-entry">スマホアプリのモックを見る →</a></div>
         <div class="hero-footnote"><span class="mini-spark" aria-hidden="true">✳</span><span><span id="hero-footnote-line">上手な人ではなく、今の自分から。</span><br><strong id="hero-footnote-strong">できることが分かると、続けやすい。</strong></span></div>
       </div>
@@ -52,7 +53,7 @@
           <circle cx="119" cy="89" r="6" fill="#bc765f"/><path d="m438 101 7-20 7 20 20 7-20 7-7 20-7-20-20-7Z" fill="#bc765f"/>
           <path d="m86 299-17-6m28-9-7-16m-7 46-18 6" stroke="#a4b298" stroke-width="4" stroke-linecap="round"/>
         </svg>
-        <div class="floating-note note-coach"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#avatar"/></svg><div><span>好きなお手本を選ぼう</span><strong>あなたに合う、はじめの一歩。</strong></div><span class="note-check" aria-hidden="true">✓</span></div>
+        <div class="floating-note note-coach"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#avatar"/></svg><div><span>今の自分に合う、おすすめから</span><strong>あなたに合う、はじめの一歩。</strong></div><span class="note-check" aria-hidden="true">✓</span></div>
         <div class="floating-note note-goal"><span class="goal-icon" aria-hidden="true">↗</span><div><span>昨日より、ちょっと前へ。</span><strong>小さな「できた」を重ねよう</strong></div></div>
         <span class="art-caption">Illustration / サービスの体験イメージ</span>
       </div>
@@ -62,12 +63,22 @@
 
     <section id="features" class="intro section wrap" aria-labelledby="intro-title">
       <p class="eyebrow">A NEW WAY TO KEEP MOVING</p><h2 id="intro-title">何をすればいいか分からない。<br>だから、最初を一緒につくる。</h2>
-      <p id="intro-description" class="section-description">AIがあなたに合う最初の動きを提案し、お手本との比較へ案内。<br>一人で始めても、次にやることが見えてくる。</p>
-        <div class="feature-line flow-steps"><article><span class="feature-number">01</span><h3>今の自分を知る</h3><p>目的や今のレベルを整理して、<br>自分の現在地を知る。</p></article><article><span class="feature-number">02</span><h3>自分のレベルから始める</h3><p>AIの提案をもとに、<br>無理なくできる練習を始める。</p></article><article><span class="feature-number">03</span><h3>お手本との違いを見つける</h3><p>自分の動きをお手本と比べて、<br>次に意識することを見つける。</p></article><article><span class="feature-number">04</span><h3>アドバイスをもらう</h3><p>AIやトレーナーのヒントから、<br>次の一歩を決める。</p></article><article><span class="feature-number">05</span><h3>結果を仲間にシェアする</h3><p>できたことや気づきを、<br>仲間と分かち合う。</p></article></div>
+      <p id="intro-description" class="section-description">自分の動きと目的を知り、合う練習とトレーナーの提案へ。<br>お手本と比べ、確認しながら、次にやることを見つける構想です。</p>
+        <div class="feature-line flow-steps"><article><span class="feature-number">01</span><h3>今の自分を知る</h3><p>スマホで簡単な動作を試し、<br>確認できる特徴と目的を整理。</p></article><article><span class="feature-number">02</span><h3>合う練習とお手本の提案</h3><p>今の状態と目的に合わせて、<br>メニューとトレーナーをおすすめ。</p></article><article><span class="feature-number">03</span><h3>お手本との違いを見つける</h3><p>自分の動きをお手本と比べて、<br>次に意識することを見つける。</p></article><article><span class="feature-number">04</span><h3>アドバイスをもらう</h3><p>AIやトレーナーのヒントから、<br>次の一歩を決める。</p></article><article><span class="feature-number">05</span><h3>結果を仲間にシェアする</h3><p>できたことや気づきを、<br>仲間と分かち合う。</p></article></div>
+    </section>
+
+    <section id="self-check" class="self-check-section wrap" aria-labelledby="self-check-title">
+      <div class="self-check-layout">
+        <div class="self-check-copy"><p class="eyebrow">START WITH YOURSELF</p><h2 id="self-check-title">まずは、自分の今を<br>知ることから。</h2><p>特別な機器がなくても、スマホひとつで。<br>ガイドに沿って簡単な動作を試し、動かせる範囲や安定性など、確認できる自分の特徴を知るところから始めます。</p><div class="self-check-flow"><span>簡単な動作チェック</span><i aria-hidden="true">→</i><span>今の状態と目的</span><i aria-hidden="true">→</i><span>練習とお手本の提案</span></div><p>「何を練習するか」も「誰のお手本で学ぶか」も、今の自分に合うおすすめを入口に。提案の理由を見て、別のお手本を選ぶこともできます。</p><div class="self-check-optional"><strong>もっと知りたい日は、手元の情報も。</strong><p>体組成の推移、スマートウォッチのデータ、前夜の睡眠や今日の活動を任意で組み合わせ、提案を考えるための情報を補う構想です。機器の利用は必須ではありません。</p></div><a class="self-check-cta" href="#demo" data-testid="self-check-demo">おすすめの体験を見る <span aria-hidden="true">↗</span></a><p class="self-check-concept">動作チェック・機器連携は開発構想です。確認できる項目は撮影条件や対応機器によって異なります。このページでは撮影・解析・機器連携を行いません。</p></div>
+        <div class="self-check-visual" role="img" aria-label="スマホで動きを確認し、今の状態と目的から練習とお手本の提案を受ける構想のサンプル">
+          <div class="check-phone"><span>FORMMATE / QUICK CHECK</span><strong>無理のない範囲で、<br>ゆっくり動こう。</strong><svg viewBox="0 0 120 145" aria-hidden="true"><path d="M20 126H104" stroke="#bdc9b2"/><ellipse cx="63" cy="126" rx="27" ry="4" fill="#cad5bf"/><path d="M57 79 43 99 53 122M70 79 82 99 74 122" stroke="#52715e" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M53 47Q63 42 72 48L76 82Q62 87 50 82Z" fill="#ba7b62"/><path d="M55 51 39 64 27 60M70 51 85 66 99 61" stroke="#d5aa89" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M62 40v8" stroke="#d5aa89" stroke-width="7"/><ellipse cx="63" cy="31" rx="9" ry="12" fill="#d5aa89"/><path d="M54 29Q52 15 66 18 76 20 71 32L68 23Z" fill="#3f5142"/><path d="M18 30V17H31M93 17H106V30M18 101V114H31M93 114H106V101" fill="none" stroke="#9eaf91" stroke-width="1.5"/></svg><small>動作チェックのイメージ</small></div>
+          <div class="check-insights"><span>NOTICE YOUR OWN MOVEMENT</span><h3>知ることが、<br>次の一歩になる。</h3><div class="check-insight"><span>動きの特徴を確認</span><strong>動かせる範囲・安定性</strong></div><div class="check-insight"><span>あなたが目指すこと</span><strong>目的と、今の状態</strong></div><div class="check-insight"><span>理由と一緒におすすめ</span><strong>合う練習とトレーナー</strong></div></div><p class="check-visual-caption">画面・観察項目は体験を伝えるサンプルです。実際の身体を評価した結果ではありません。</p>
+        </div>
+      </div>
     </section>
 
     <section id="demo" class="demo-section section" aria-labelledby="demo-title">
-      <div class="wrap"><div class="section-top"><div><p class="eyebrow">YOUR FOCUS. YOUR INSPIRATION.</p><h2 id="demo-title">何を磨くかも、<br>誰をお手本にするかも、自分で。</h2></div><p class="section-side-note">練習のタイプと、好きなお手本を選んで。<br>あなたの目的に合わせた比較を体験しよう。</p></div>
+      <div class="wrap"><div class="section-top"><div><p class="eyebrow">A PLAN AND A COACH FOR YOU</p><h2 id="demo-title">今のあなたに、<br>合う練習と、合うお手本を。</h2></div><p class="section-side-note">おすすめの理由を知って、試してみる。<br>まずは目的に合わせた提案のサンプルから。</p></div>
       <div class="practice-panel">
         <p class="small-label" id="practice-title">01 / 重視する練習タイプを選ぶ</p>
         <div class="practice-options" role="group" aria-labelledby="practice-title">
@@ -78,7 +89,7 @@
         <p id="practice-description" class="practice-description" aria-live="polite">お手本と並べて、姿勢や動きの位置に注目。</p>
       </div>
       <div class="demo-layout">
-        <div class="trainer-panel"><p class="small-label">02 / 好きなお手本を選ぶ</p><p class="trainer-choice-note">どの練習タイプでも、好きなトレーナーを選べます。</p><div class="trainer-list" aria-label="サンプルトレーナーを選ぶ">
+        <div class="trainer-panel"><p class="small-label">02 / おすすめのお手本を確認</p><p class="trainer-choice-note">目的に合うおすすめを表示します。ほかのお手本への変更もできます。</p><div class="trainer-recommendation" aria-live="polite"><span id="recommendation-mode">目的に合わせたおすすめ</span><p id="trainer-recommendation-reason">フォームを整えたい目的に合わせて、基本の姿勢や位置をていねいに見るMINAのお手本をおすすめします。</p></div><div class="trainer-list" aria-label="おすすめを確認し、任意で別のサンプルトレーナーに変更する">
           <button class="trainer-option is-selected" data-trainer="mina" aria-pressed="true" data-testid="trainer-mina"><svg viewBox="0 0 100 100" class="avatar" style="color:#bb6c54" aria-hidden="true"><use href="#avatar"/></svg><span><span class="trainer-name">MINA <small>フォーム重視</small></span><span class="trainer-role">ていねいに、フォームから。</span></span><span class="trainer-check" aria-hidden="true">✓</span></button>
           <button class="trainer-option" data-trainer="ryo" aria-pressed="false" data-testid="trainer-ryo"><svg viewBox="0 0 100 100" class="avatar" style="color:#5f8073" aria-hidden="true"><use href="#avatar"/></svg><span><span class="trainer-name">RYO <small>自重トレーニング</small></span><span class="trainer-role">自分のペースで、少しずつ。</span></span><span class="trainer-check" aria-hidden="true">✓</span></button>
           <button class="trainer-option" data-trainer="haru" aria-pressed="false" data-testid="trainer-haru"><svg viewBox="0 0 100 100" class="avatar" style="color:#9c7b44" aria-hidden="true"><use href="#avatar"/></svg><span><span class="trainer-name">HARU <small>ゆっくり習慣づくり</small></span><span class="trainer-role">続けられる、わたしの習慣。</span></span><span class="trainer-check" aria-hidden="true">✓</span></button>
@@ -90,7 +101,7 @@
           <div class="playback"><button id="play-demo" class="play-button" aria-pressed="false" aria-label="比較デモを再生する" data-testid="play-demo"><span id="play-icon" aria-hidden="true">▶</span></button><div class="phase-track" role="group" aria-label="動作の場面"><button data-phase="0" aria-pressed="true" data-testid="phase-start"><span></span>はじめの姿勢</button><button data-phase="1" aria-pressed="false" data-testid="phase-squat"><span></span>しゃがむ動き</button><button data-phase="2" aria-pressed="false" data-testid="phase-return"><span></span>戻る動き</button></div><span id="phase-count" class="phase-count">01 / 03</span></div>
           <button id="compare-demo" class="button compare-action" data-testid="compare-demo" aria-controls="feedback-result">選んだ内容で比較する <span aria-hidden="true">↗</span></button>
           <div class="feedback-area" aria-live="polite" aria-atomic="true">
-            <p id="feedback-empty" class="feedback-pending">練習タイプとお手本を選んだら、比較ボタンでサンプルのフィードバックを見てみよう。</p>
+            <p id="feedback-empty" class="feedback-pending">おすすめのお手本を確認したら、比較ボタンでサンプルのフィードバックを見てみよう。</p>
             <div id="feedback-result" class="feedback" hidden><span class="feedback-icon" aria-hidden="true">✧</span><div><span class="small-label">AI FEEDBACK / サンプル</span><p id="feedback-context" class="feedback-context"></p><p id="feedback-point"></p><p id="feedback-cue"></p><p id="feedback-advice"></p></div></div>
           </div>
           <p class="demo-disclaimer">イラストによる比較デモです。動画の送信・保存や、実際のAI解析は行いません。</p>
@@ -98,7 +109,7 @@
       </div></div>
     </section>
 
-    <section id="how-it-works" class="section wrap how-section" aria-labelledby="how-title"><div class="section-top"><div><p class="eyebrow">SMALL STEPS, REAL PROGRESS</p><h2 id="how-title">今の自分を知って、<br>次の一歩を見つける。</h2></div><p class="section-side-note">分からないまま始めない。<br>自分に合う方法で進める。</p></div><ol class="steps"><li><span class="step-index">01</span><span class="step-doodle" aria-hidden="true">♡</span><h3>今の自分を知る</h3><p>目的や今のレベルを整理して、<br>自分の現在地を知る。</p></li><li><span class="step-index">02</span><span class="step-doodle" aria-hidden="true">◎</span><h3>自分のレベルから始める</h3><p>AIの提案をもとに、<br>無理なくできる練習を始める。</p></li><li><span class="step-index">03</span><span class="step-doodle" aria-hidden="true">↗</span><h3>お手本との違いを見つける</h3><p>自分の動きをお手本と比べて、<br>次に意識することを見つける。</p></li><li><span class="step-index">04</span><span class="step-doodle" aria-hidden="true">✳</span><h3>アドバイスをもらう</h3><p>AIやトレーナーのヒントから、<br>次の一歩を決める。</p></li><li><span class="step-index">05</span><span class="step-doodle" aria-hidden="true">↗</span><h3>結果を仲間にシェアする</h3><p>できたことや気づきを、<br>仲間と分かち合う。</p></li></ol><p class="section-caption">上記は開発中のサービスの利用イメージです。</p></section>
+    <section id="how-it-works" class="section wrap how-section" aria-labelledby="how-title"><div class="section-top"><div><p class="eyebrow">SMALL STEPS, REAL PROGRESS</p><h2 id="how-title">今の自分を知って、<br>次の一歩を見つける。</h2></div><p class="section-side-note">分からないまま始めない。<br>自分に合う方法で進める。</p></div><ol class="steps"><li><span class="step-index">01</span><span class="step-doodle" aria-hidden="true">♡</span><h3>今の自分を知る</h3><p>スマホで簡単な動作を試し、<br>確認できる特徴と目的を整理。</p></li><li><span class="step-index">02</span><span class="step-doodle" aria-hidden="true">◎</span><h3>おすすめを確かめる</h3><p>合う練習とトレーナーの提案を、<br>理由と一緒に確認する。</p></li><li><span class="step-index">03</span><span class="step-doodle" aria-hidden="true">↗</span><h3>お手本との違いを見つける</h3><p>自分の動きをお手本と比べて、<br>次に意識することを見つける。</p></li><li><span class="step-index">04</span><span class="step-doodle" aria-hidden="true">✳</span><h3>アドバイスをもらう</h3><p>AIやトレーナーのヒントから、<br>次の一歩を決める。</p></li><li><span class="step-index">05</span><span class="step-doodle" aria-hidden="true">↗</span><h3>結果を仲間にシェアする</h3><p>できたことや気づきを、<br>仲間と分かち合う。</p></li></ol><p class="section-caption">上記は開発中のサービスの利用イメージです。</p></section>
 
     <section id="motivation" class="section wrap motivation-section" aria-labelledby="motivation-title">
       <div class="section-top"><div><p class="eyebrow">MORE REASONS TO SHOW UP</p><h2 id="motivation-title">見せたい成長がある。<br>次に挑みたい日がある。</h2></div><p class="section-side-note">練習して終わりじゃない。<br>シェアする、学ぶ、集まる楽しみを、その先に。</p></div>
