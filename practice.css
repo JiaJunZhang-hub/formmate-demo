@@ -1,0 +1,37 @@
+[hidden] { display: none !important; }
+.practice-panel { padding: 0 0 30px; margin-bottom: 22px; border-bottom: 1px solid #d9dccf; }
+.practice-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.practice-option { display: flex; align-items: center; gap: 14px; padding: 20px 18px; text-align: left; background: #f5f5eb; border: 1px solid #d9dccf; border-radius: 10px; min-width: 0; transition: background .2s, border-color .2s; }
+.practice-option:hover { border-color: #8d9f84; background: #fffef9; }
+.practice-option.is-selected { background: #fffef9; border-color: #8d9f84; box-shadow: 0 3px 0 #becbb540; }
+.practice-number { flex-shrink: 0; font-family: Georgia, serif; font-size: 18px; color: var(--coral); }
+.practice-option strong { display: block; font-size: 13px; font-weight: 600; line-height: 1.6; }
+.practice-option small { display: block; margin-top: 5px; font-size: 10px; line-height: 1.8; color: var(--muted); }
+.practice-check { margin-left: auto; color: var(--sage); visibility: hidden; }
+.practice-option.is-selected .practice-check { visibility: visible; }
+.practice-description, .trainer-choice-note { color: var(--muted); font-size: 11px; line-height: 1.9; margin-top: 13px; }
+.trainer-choice-note { font-size: 10px; }
+.comparison-selection { font-size: 10px; line-height: 1.8; margin-top: 12px; color: var(--sage); }
+.compare-action.button { width: 100%; font-size: 12px; padding: 14px 18px; margin-bottom: 16px; }
+.feedback-pending { font-size: 11px; line-height: 2; padding: 18px; border: 1px dashed #ccd4c3; border-radius: 7px; color: var(--muted); }
+.feedback .feedback-context { font-size: 9px; color: var(--sage); }
+.feedback #feedback-point { font-size: 10px; font-weight: 600; color: var(--sage); }
+@media (max-width: 800px) {
+  .practice-options { gap: 9px; }
+  .practice-option { padding: 15px 12px; gap: 9px; }
+  .practice-option strong { font-size: 11px; }
+  .practice-option small { font-size: 9px; }
+  .practice-number { font-size: 15px; }
+}
+@media (max-width: 560px) {
+  .practice-options { grid-template-columns: 1fr; }
+  .practice-panel { padding-bottom: 22px; margin-bottom: 8px; }
+  .practice-option { padding: 14px; }
+  .practice-option strong { font-size: 12px; }
+  .practice-option small { margin-top: 2px; }
+  .practice-description, .trainer-choice-note { font-size: 10px; }
+  .comparison-selection { font-size: 9px; }
+  .compare-action.button { font-size: 11px; gap: 16px; }
+  .feedback-pending { font-size: 10px; padding: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .practice-option { transition: none; } }

@@ -1,0 +1,68 @@
+.motivation-section { padding-bottom: 80px; }
+.motivation-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.motivation-card { min-width: 0; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; background: var(--white); }
+.motivation-art { height: 250px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.share-art { background: #e8ecdf; }
+.live-art { background: #f0e1d7; }
+.reward-art { background: #eee7d3; }
+.sample-reel { width: 160px; background: #fffef9; padding: 12px; border-radius: 13px; transform: rotate(-6deg); box-shadow: 0 12px 24px #36452c12; border: 1px solid #d9dfcf; }
+.reel-label { font-size: 8px; font-weight: 600; letter-spacing: 1.4px; color: var(--sage); }
+.reel-figures { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin: 12px 0; background: #eef1e7; padding: 8px 0; border-radius: 7px; }
+.reel-figures svg { width: 100%; }
+.reel-caption { font-size: 9px; display: block; text-align: center; }
+.reel-timeline { display: flex; gap: 4px; margin-top: 12px; }
+.reel-timeline i { height: 4px; border-radius: 3px; background: #adc0a2; flex: 1; }
+.reel-timeline i:nth-child(2) { background: var(--coral); }
+.art-sticker { position: absolute; right: 18%; top: 36px; background: var(--sage); color: white; border-radius: 50%; width: 38px; height: 38px; display: grid; place-items: center; font-size: 23px; transform: rotate(10deg); }
+.sample-live { width: 190px; border-radius: 13px; border: 1px solid #ddc5b8; background: #fbf3ea; padding: 13px; transform: rotate(3deg); text-align: center; box-shadow: 0 12px 24px #754a3610; }
+.live-indicator { display: flex; align-items: center; gap: 5px; font-size: 8px; font-weight: 600; letter-spacing: 1px; color: #89503d; }
+.live-indicator>span { width: 5px; height: 5px; background: var(--coral); border-radius: 50%; }
+.sample-live svg { width: 82px; margin: 15px auto; }
+.live-caption { font-size: 10px; }
+.question-bubble { position: absolute; right: 10px; bottom: 24px; background: var(--white); border: 1px solid #dbc6b9; padding: 10px 13px; border-radius: 12px 12px 3px 12px; font-size: 9px; transform: rotate(-5deg); }
+.sample-ticket { width: min(235px, 80%); text-align: center; background: #fff9e9; border: 1px solid #d8caa3; padding: 20px 14px; border-radius: 14px; transform: rotate(-5deg); box-shadow: 0 12px 24px #79623410; }
+.sample-ticket>span { font-family: Arial, sans-serif; font-size: 7px; letter-spacing: 1.3px; color: #8c7449; }
+.sample-ticket svg { width: 32px; color: #b89551; margin: 16px auto; }
+.sample-ticket strong { display: block; font-size: 13px; font-weight: 600; }
+.sample-ticket small { display: block; border-top: 1px dashed #d9cca7; margin-top: 15px; padding-top: 12px; font-size: 9px; color: var(--muted); }
+.ticket-seal { position: absolute; right: 13%; top: 28px; width: 37px; height: 37px; border-radius: 50%; background: #59715f; border: 4px solid #dce1ce; color: #fffef9; display: grid; place-items: center; font-size: 16px; transform: rotate(12deg); }
+.motivation-card-copy { padding: 25px 23px 30px; }
+.motivation-kicker { font-size: 10px; color: var(--coral); letter-spacing: .5px; }
+.motivation-card h3 { font-size: 20px; line-height: 1.8; font-weight: 600; margin-top: 13px; }
+.motivation-card p { margin-top: 15px; color: var(--muted); font-size: 12px; line-height: 2; }
+.motivation-card .motivation-detail { font-size: 10px; line-height: 1.9; margin-top: 12px; }
+.motivation-card .planned-tag { display: inline-block; margin-top: 18px; line-height: 1.7; }
+.motivation-notice { color: var(--muted); font-size: 10px; line-height: 2; margin-top: 25px; padding-left: 13px; border-left: 2px solid #d2dac9; }
+.motivation-team-link { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 12px; color: var(--sage); margin-top: 28px; padding: 12px; }
+.motivation-team-link:hover { color: var(--coral); }
+@media (max-width: 1000px) {
+  .motivation-grid { gap: 13px; }
+  .motivation-card-copy { padding: 21px 16px 25px; }
+  .motivation-card h3 { font-size: 17px; }
+  .motivation-card p { font-size: 11px; }
+  .motivation-art { height: 220px; }
+  .sample-live { width: 155px; }
+  .sample-ticket { width: 85%; padding-inline: 10px; }
+  .sample-ticket strong { font-size: 11px; }
+  .question-bubble { font-size: 8px; right: 5px; }
+}
+@media (max-width: 800px) {
+  .motivation-grid { grid-template-columns: 1fr; gap: 20px; }
+  .motivation-card { display: grid; grid-template-columns: .85fr 1.15fr; }
+  .motivation-art { height: auto; min-height: 280px; }
+  .motivation-card-copy { padding: 26px 22px; }
+  .motivation-card h3 { font-size: 20px; }
+  .motivation-section { padding-bottom: 55px; }
+}
+@media (max-width: 560px) {
+  .motivation-card { display: block; }
+  .motivation-art { height: 230px; min-height: 0; }
+  .motivation-card-copy { padding: 23px; }
+  .motivation-card h3 { font-size: 21px; }
+  .motivation-card p { font-size: 12px; }
+  .motivation-notice { font-size: 10px; }
+  .motivation-team-link { font-size: 11px; }
+  .sample-live { width: 190px; }
+  .sample-ticket { width: 235px; }
+  .question-bubble { right: 14%; }
+}
