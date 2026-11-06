@@ -6,17 +6,49 @@ export function portrait(coach, size = '') {
 }
 
 export function movement({ pose = 'squat', phase = 0, color = '#b96e58', label = '動作のサンプル', self = false, guide = false } = {}) {
-  let legs = 'M126 151 114 208 101 266M145 151l15 57 14 58';
-  let arms = 'M124 90 99 132 67 116M149 90l27 41 31-15';
-  let torso = 'M124 79q16-10 29 4l8 76q-20 11-46-2Z';
-  let headY = 49;
-  if (pose === 'squat' && phase === 1) { legs = 'm119 173-42 36 39 57m43-91 39 32-32 59'; torso = 'M124 105q17-8 30 5l18 70q-27 14-58-2Z'; arms = 'M130 119 93 141 59 134M154 119l23 24 34-10'; headY = 75; }
-  if (pose === 'hinge' && phase === 1) { torso = 'M127 101q7-20 22-10l50 43-33 31-52-48Z'; arms = 'm173 125 11 50-6 25m-27-74 8 48-9 23'; headY = 103; legs = 'm128 151-14 57-13 58m34-110 24 51 15 59'; }
-  if (pose === 'reach' && phase === 1) arms = 'M125 90 100 61 91 17M150 90l26-30 10-43';
-  if (phase === 2) arms = pose === 'reach' ? 'M125 90 91 92 61 74M150 90l35 2 28-18' : 'M125 90 99 129 70 142M149 90l27 39 30 13';
-  const headX = pose === 'hinge' && phase === 1 ? 204 : 140;
-  const skeleton = guide ? `<path d="M140 ${headY + 25}v72m0-52-42 39m42-39 42 39m-42 13-20 50-17 52m37-102 20 50 15 52" fill="none" stroke="#668b6d" stroke-width="2" stroke-dasharray="4 5" opacity=".6"/>` : '';
-  return `<svg class="movement" viewBox="0 0 280 300" role="img" aria-label="${escapeHtml(label)}"><ellipse cx="140" cy="277" rx="98" ry="10" fill="#5c6b4720"/><path d="M35 227h211M35 166h211M35 105h211" stroke="#fff" stroke-width="1" opacity=".4"/><g ${self ? 'transform="translate(5 0) rotate(2 140 260)"' : ''}><path d="${legs}" fill="none" stroke="#40584e" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/><path d="M94 265h23m48 0h25" stroke="#f9f6ec" stroke-width="12" stroke-linecap="round"/><path d="${torso}" fill="${color}"/><path d="${arms}" stroke="#d7ad91" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${headX} ${headY + 19}v13" stroke="#d7ad91" stroke-width="14"/><ellipse cx="${headX}" cy="${headY}" rx="21" ry="25" fill="#d7ad91"/><path d="M${headX - 21} ${headY}q-8-33 27-29 25 4 14 31l-6-19-30 20Z" fill="#33473a"/></g>${skeleton}</svg>`;
+  if (!['squat', 'hinge', 'reach'].includes(pose) || ![0, 1, 2].includes(phase)) throw new RangeError('不明な動作・場面です。');
+  if (typeof color !== 'string' || !/^#[\da-f]{6}$/i.test(color)) throw new TypeError('人物の色は6桁のHEX値で指定してください。');
+  const model = movementJoints(pose, phase, self);
+  const { shoulder, hip, farArm, nearArm, farLeg, nearLeg } = model;
+  const dx = shoulder[0] - hip[0], dy = shoulder[1] - hip[1];
+  const length = Math.hypot(dx, dy), up = [dx / length, dy / length];
+  const angle = Math.atan2(dx, -dy) * 180 / Math.PI;
+  const head = [shoulder[0] + up[0] * 34, shoulder[1] + up[1] * 34];
+  const neck = [shoulder[0] + up[0] * 15, shoulder[1] + up[1] * 15];
+  const skin = self ? '#c99a78' : '#d9ad8c';
+  const skinShade = self ? '#b78666' : '#c39273';
+  const pants = self ? '#61745e' : '#43594f';
+  const limb = (points, widths, fill) => points.slice(1).map((end, i) => taperedLimb(points[i], end, widths[i], widths[i + 1], fill)).join('');
+  const leg = (points, far = false) => `${limb(points, [12, 9, 5], far ? '#344a42' : pants)}${taperedLimb([points[1][0] + 2, points[1][1] + 8], [points[2][0] + 1, points[2][1] - 8], 3.5, 2, far ? '#3a5047' : '#53695c')}${shoe(points[2], far)}`;
+  const arm = (points, far = false) => `${limb(points, [7, 5.2, 3.5], far ? skinShade : skin)}<ellipse cx="${points[2][0]}" cy="${points[2][1] + 3}" rx="4" ry="6" fill="${far ? skinShade : skin}"/>`;
+  const torso = `<g transform="translate(${shoulder.join(' ')}) rotate(${angle})"><path d="M-14 1Q-10-5-5-4L5-4Q11-4 15 3L21 17 13 23 11 ${length - 7}Q1 ${length + 4}-13 ${length - 3}L-14 24-21 19Z" fill="${color}"/><path d="M-14 24-10 ${length - 10}Q-2 ${length - 6} 10 ${length - 9}L11 ${length - 3}Q-1 ${length + 3}-13 ${length - 3}Z" fill="#304738" opacity=".15"/><path d="M5 25Q0 40 4 ${length - 17}M-9 ${length - 15}l13 3" stroke="#fff7e9" stroke-width="1.3" fill="none" opacity=".25"/><path d="M-6-3Q0 4 6-3" stroke="#6e4d3d" stroke-width="2" fill="none" opacity=".45"/></g>`;
+  const headArt = `<g transform="translate(${head.join(' ')}) rotate(${angle})"><path d="M-10-10Q-8-17 2-16 12-15 12-5L15 1Q16 3 12 4L11 11Q7 18-2 15L-9 9Z" fill="${skin}"/><path d="M-10-8Q-18-17-5-20 9-24 14-13L11-6Q7-7 5-13L-2-10-6-1-10 0Z" fill="#34453a"/><path d="M-10-11Q-14-18-7-22-2-26 2-22L1-17Z" fill="#34453a"/><ellipse cx="-7" cy="2" rx="3" ry="4" fill="${skinShade}"/><path d="M8-1l2 .5" stroke="#475146" stroke-width="1.4" stroke-linecap="round"/><path d="M9 9l-4 .5" stroke="#a1735b" stroke-width="1.2" stroke-linecap="round"/><path d="M-1 14l7-1" stroke="${skinShade}" stroke-width="2" opacity=".6"/></g>`;
+  const chain = (points) => points.map((point, index) => `${index ? 'L' : 'M'}${point.join(' ')}`).join('');
+  const skeleton = guide ? `<g class="pose-guide" fill="none" stroke="#698a73" stroke-width="1.3" opacity=".65"><path d="${chain([head, shoulder, hip])}${chain(nearArm)}${chain(farArm)}${chain(nearLeg)}${chain(farLeg)}" stroke-dasharray="3 4"/>${[shoulder, hip, nearArm[1], nearLeg[1], nearLeg[2]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.4" fill="#f6f6e9"/>`).join('')}</g>` : '';
+  return `<svg class="movement" viewBox="0 0 280 300" role="img" aria-label="${escapeHtml(label)}"><ellipse cx="142" cy="278" rx="72" ry="7" fill="#526849" opacity=".12"/><path d="M48 279h184" stroke="#bcc9af" stroke-width="1"/>${arm(farArm, true)}${leg(farLeg, true)}${leg(nearLeg)}${taperedLimb(shoulder, neck, 6, 5, skin)}${torso}${arm(nearArm)}${headArt}${skeleton}</svg>`;
+}
+
+// Every pose shares grounded ankles and limb chains; the guide uses these exact joints.
+export function movementJoints(pose, phase, self = false) {
+  const base = { shoulder: [143, 98], hip: [139, 165], farArm: [[135, 101], [118, 135], [112, 170]], nearArm: [[151, 103], [160, 139], [159, 175]], farLeg: [[132, 165], [126, 215], [122, 265]], nearLeg: [[146, 166], [151, 216], [156, 265]] };
+  if (pose === 'squat' && phase === 1) Object.assign(base, { shoulder: [145, 120], hip: [110, 182], farArm: [[137, 121], [172, 130], [205, 128]], nearArm: [[151, 126], [186, 139], [221, 140]], farLeg: [[103, 182], [142, 210], [122, 265]], nearLeg: [[117, 184], [169, 211], [156, 265]] });
+  if (pose === 'squat' && phase === 2) Object.assign(base, { shoulder: [146, 102], hip: [134, 167], farArm: [[138, 104], [163, 130], [192, 140]], nearArm: [[154, 107], [178, 139], [207, 148]], farLeg: [[127, 167], [125, 216], [122, 265]], nearLeg: [[141, 168], [155, 217], [156, 265]] });
+  if (pose === 'hinge' && phase === 1) Object.assign(base, { shoulder: [169, 123], hip: [111, 168], farArm: [[160, 120], [158, 159], [150, 194]], nearArm: [[175, 129], [180, 169], [174, 205]], farLeg: [[104, 168], [127, 215], [122, 265]], nearLeg: [[118, 169], [144, 214], [156, 265]] });
+  if (pose === 'hinge' && phase === 2) Object.assign(base, { shoulder: [154, 103], hip: [130, 166], farArm: [[145, 104], [137, 143], [135, 178]], nearArm: [[160, 109], [161, 148], [158, 184]], farLeg: [[123, 166], [126, 215], [122, 265]], nearLeg: [[137, 167], [151, 216], [156, 265]] });
+  if (pose === 'reach' && phase === 1) Object.assign(base, { farArm: [[134, 99], [115, 64], [116, 26]], nearArm: [[152, 101], [174, 67], [177, 29]] });
+  if (pose === 'reach' && phase === 2) Object.assign(base, { farArm: [[134, 100], [102, 95], [75, 76]], nearArm: [[152, 103], [186, 99], [214, 83]] });
+  if (self) { base.nearArm[1][0] -= 3; base.nearArm[2][0] -= 4; }
+  return base;
+}
+
+function taperedLimb(start, end, startRadius, endRadius, fill = '#53695c') {
+  const distance = Math.hypot(end[0] - start[0], end[1] - start[1]);
+  const n = [-(end[1] - start[1]) / distance, (end[0] - start[0]) / distance];
+  const p = (point, radius, sign) => [point[0] + n[0] * radius * sign, point[1] + n[1] * radius * sign].join(' ');
+  return `<path d="M${p(start, startRadius, 1)}L${p(end, endRadius, 1)}A${endRadius} ${endRadius} 0 0 0 ${p(end, endRadius, -1)}L${p(start, startRadius, -1)}A${startRadius} ${startRadius} 0 0 0 ${p(start, startRadius, 1)}Z" fill="${fill}"/>`;
+}
+function shoe([x, y], far) {
+  return `<g transform="translate(${x} ${y})"><path d="M-5-5 5-5 8 0 18 3Q22 5 20 10H-8L-9 5Z" fill="${far ? '#d9decd' : '#f7f5eb'}"/><path d="M-8 9H20" stroke="${far ? '#82937d' : '#a1ac95'}" stroke-width="2.5" stroke-linecap="round"/><path d="M4 0l5 1M3 3l7 1" stroke="#a0ad96" stroke-width="1.2"/><path d="M-6-4 3-4" stroke="#d5a888" stroke-width="3"/></g>`;
 }
 
 export function groupArt() {
