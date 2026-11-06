@@ -1,5 +1,5 @@
-import { RECOVERY_SAMPLES, DAILY_PLANS, LIVE_SAMPLES, recoveryProposal, currentDailyPlan, liveReading } from './premium.mjs?v=20261106-form-body';
-import { escapeHtml as e } from './illustrations.mjs?v=20261106-form-body';
+import { RECOVERY_SAMPLES, DAILY_PLANS, LIVE_SAMPLES, recoveryProposal, currentDailyPlan, liveReading } from './premium.mjs?v=20261106-devices-office';
+import { escapeHtml as e } from './illustrations.mjs?v=20261106-devices-office';
 
 const btn = (text, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${text}</button>`;
 const go = (text, id, cls = 'primary') => btn(text, 'navigate', id, cls);
@@ -12,14 +12,17 @@ const disclaimer = '<p class="fine-print">すべて架空のサンプルです�
 export function premiumEntry(state) {
   const p = state.premium; const proposal = recoveryProposal(p);
   const plan = DAILY_PLANS[currentDailyPlan(p)]; const sample = RECOVERY_SAMPLES[p.sample];
-  return `<section class="premium-entry"><div class="between"><span class="eyebrow">PREMIUM / からだ連動コーチ</span><span aria-hidden="true">✧</span></div><h2>今日のからだに、<br>今日の練習を。</h2><div class="premium-entry-status"><span class="status-dot"></span>${p.connected ? proposal.status : '時計は未接続 / 回復状況は不明'}</div><div class="home-recovery-summary"><span>昨夜の睡眠<strong>${p.connected ? sample.sleep : '未取得'}</strong></span><span>${p.acceptedPlan ? '選んだプラン' : '今日のプラン案'}<strong>${plan.minutes} · ${plan.intensity}</strong></span></div><p>${plan.name}</p><details class="premium-reason"><summary>このプランを提案する理由</summary><p>${e(proposal.reason)}</p></details>${go('睡眠と回復を確認する ↗', 'P01', 'primary small')}${go('今日のプランを見る →', 'P02', 'text-button')}${p.active ? go('練習中の画面に戻る', 'P03', 'text-button') : p.recap ? go('前回の振り返りを見る', 'P04', 'text-button') : ''}<small>計測値・提案はサンプルです。身体データは自分だけ。</small></section>`;
+  const sleepReady = p.connected && p.sleepAvailable;
+  return `<section class="premium-entry"><div class="between"><span class="eyebrow">PREMIUM / からだ連動コーチ</span><span aria-hidden="true">✧</span></div><h2>今日のからだに、<br>今日の練習を。</h2><div class="premium-entry-status"><span class="status-dot"></span>${p.connected ? proposal.status : '時計は未接続 / 回復状況は不明'}</div><div class="home-recovery-summary"><span>昨夜の睡眠<strong>${sleepReady ? sample.sleep : '未取得'}</strong></span><span>${p.acceptedPlan ? '選んだプラン' : '今日のプラン案'}<strong>${plan.minutes} · ${plan.intensity}</strong></span></div><p>${plan.name}</p><details class="premium-reason"><summary>このプランを提案する理由</summary><p>${e(proposal.reason)}</p></details>${go('睡眠と回復を確認する ↗', 'P01', 'primary small')}${go('今日のプランを見る →', 'P02', 'text-button')}${p.active ? go('練習中の画面に戻る', 'P03', 'text-button') : p.recap ? go('前回の振り返りを見る', 'P04', 'text-button') : ''}<small>計測値・提案はサンプルです。身体データは自分だけ。</small></section>`;
 }
 function P01(state) {
   const p = state.premium; const sample = RECOVERY_SAMPLES[p.sample]; const proposal = recoveryProposal(p);
+  const sleepReady = p.connected && p.sleepAvailable;
   return `${back('M01', '睡眠と回復')}${title('REST IS PART OF PROGRESS', '昨夜の休息が、<br>今日の一歩になる。', '睡眠・運動履歴・あなたの実感を、一緒に。')}
   ${p.active ? `<div class="notice">練習中です。プランの見直しは練習後にできます。</div>${go('練習に戻る →', 'P03')}` : `<div class="watch-connect"><span class="watch-icon" aria-hidden="true">◷</span><div><strong>${p.connected ? '時計接続中のサンプル' : '時計は未接続の想定'}</strong><small>実機へのアクセスはありません</small></div>${btn(p.connected ? '切断' : '接続を試す', 'watch', p.connected ? 'disconnected' : 'connected', 'secondary small')}</div>`}
-  <div class="recovery-card"><span class="eyebrow">TODAY’S RECOVERY / 推定の例</span><h2>${proposal.status}</h2><div class="sleep-moon" aria-hidden="true">☾<span>✧</span></div><div class="sleep-metrics"><div><span>昨夜の睡眠</span><strong>${p.connected ? sample.sleep : '取得できていません'}</strong></div><div><span>睡眠の質</span><strong>${p.connected ? sample.quality : '評価できません'}</strong></div></div><p>${e(proposal.reason)}</p></div>
-  <div class="source-row"><span class="source-label">直近の運動</span><p>${p.connected ? sample.activity : '時計未接続のため未確認'}</p></div>
+  ${p.connected ? btn('時計データのサンプルを同期する', 'deviceWatchRead', 'synced', 'secondary') : ''}
+  <div class="recovery-card"><span class="eyebrow">TODAY’S RECOVERY / 推定の例</span><h2>${proposal.status}</h2><div class="sleep-moon" aria-hidden="true">☾<span>✧</span></div><div class="sleep-metrics"><div><span>昨夜の睡眠</span><strong>${sleepReady ? sample.sleep : '取得できていません'}</strong></div><div><span>睡眠の質</span><strong>${sleepReady ? sample.quality : '評価できません'}</strong></div></div><p>${e(proposal.reason)}</p><p class="fine-print">データ元：時計のサンプル / 同期：${sleepReady ? state.devices.watchTime : '未確認'}</p></div>
+  <div class="source-row"><span class="source-label">直近の運動</span><p>${sleepReady ? sample.activity : '新しいデータを確認できていません'}</p></div>
   ${p.active ? '' : `<section class="question"><h2>今の疲れは、どうですか？</h2>${chips([['fresh', '疲れは少ない'], ['some', '少し疲れている'], ['tired', '休みたい']], p.fatigue, 'fatigue')}<p class="fine-print">あなたの実感も、今日のプランに反映します。</p></section>`}
   <div class="source-row"><span class="source-label">本人の回答</span><p>${proposal.fatigue}</p></div>${go('今日のおすすめを確認する →', 'P02')}
   ${p.active ? '' : `<details class="disclosure"><summary>回復状況のサンプルを切り替える <span>＋</span></summary>${chips(Object.entries(RECOVERY_SAMPLES).map(([id, value]) => [id, value.name]), p.sample, 'recoverySample')}<p>数値は架空です。実際の回復スコアや判定基準を示すものではありません。</p></details>`}${privacy}${disclaimer}`;

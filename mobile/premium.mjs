@@ -18,7 +18,7 @@ export const LIVE_SAMPLES = Object.freeze({
   missing: { name: 'データが届かない例', heart: null, pace: null, respiration: null, cue: '新しいデータが届いていません。計測値による助言を一時停止しています。', label: '計測できていません', priority: 'unknown' },
 });
 export function createPremium() {
-  return { sample: 'limited', fatigue: 'some', connected: false, selectedPlan: null, acceptedPlan: null, active: false, live: 'steady', tick: 0, lastAlert: null, alerts: [], recap: null, privacy: 'private' };
+  return { sample: 'limited', fatigue: 'some', connected: false, sleepAvailable: false, selectedPlan: null, acceptedPlan: null, active: false, live: 'steady', tick: 0, lastAlert: null, alerts: [], recap: null, privacy: 'private' };
 }
 function valid(value, options, name) {
   if (!options.includes(value)) throw new RangeError(`${name}の選択が不正です。`);
@@ -26,7 +26,7 @@ function valid(value, options, name) {
 }
 export function recoveryProposal(premium) {
   const sample = RECOVERY_SAMPLES[premium.sample];
-  const unavailable = !premium.connected || premium.sample === 'missing';
+  const unavailable = !premium.connected || !premium.sleepAvailable || premium.sample === 'missing';
   const plan = premium.fatigue === 'tired' || (!unavailable && sample.plan === 'rest') ? 'rest' : unavailable || premium.fatigue === 'some' ? 'light' : sample.plan;
   return {
     status: unavailable ? '回復状況は不明' : { usual: 'いつもの練習を提案', light: '今日は軽めを提案', rest: '休養を選べる日' }[plan],
@@ -35,7 +35,7 @@ export function recoveryProposal(premium) {
     plan, unknown: unavailable,
   };
 }
-export function currentDailyPlan(premium) { return premium.selectedPlan ?? recoveryProposal(premium).plan; }
+export function currentDailyPlan(premium) { return premium.active && premium.acceptedPlan ? premium.acceptedPlan : premium.selectedPlan ?? recoveryProposal(premium).plan; }
 export function liveReading(premium) {
   if (!premium.connected || premium.live === 'missing') return { ...LIVE_SAMPLES.missing, disconnected: !premium.connected };
   return LIVE_SAMPLES[premium.live];
@@ -49,6 +49,7 @@ export function reducePremium(premium, action) {
     case 'fatigue': next.fatigue = valid(action.value, ['fresh', 'some', 'tired'], '疲労感'); invalidatePlan(); break;
     case 'watch':
       next.connected = valid(action.value, ['connected', 'disconnected'], '時計接続') === 'connected';
+      next.sleepAvailable = false;
       if (!next.active) invalidatePlan();
       next.live = 'missing';
       break;

@@ -1,0 +1,43 @@
+import { SCALE_SAMPLE, OFFICE_EXERCISES, scaleAvailable, reminderState } from './devices-office.mjs?v=20261106-devices-office';
+import { escapeHtml as e } from './illustrations.mjs?v=20261106-devices-office';
+const btn = (label, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${label}</button>`;
+const go = (text, id, cls = 'primary') => btn(text, 'navigate', id, cls);
+const chips = (items, selected, action, field = '') => `<div class="choice-row">${items.map(([value, label]) => btn(label, action, value, `chip ${selected === value ? 'selected' : ''}`, `aria-pressed="${selected === value}"${field ? ` data-field="${field}"` : ''}`)).join('')}</div>`;
+const top = (title) => `<div class="back-row">${btn('←', 'navigate', 'M01', 'icon-button', 'aria-label="ホームへ戻る"')}<span>${title}</span><span class="tag">サンプル</span></div>`;
+const heading = (eyebrow, title, sub) => `<div class="page-heading"><span class="eyebrow">${eyebrow}</span><h1>${title}</h1><p>${sub}</p></div>`;
+const note = '<p class="fine-print">機器・数値・時刻は架空のサンプルです。実際の接続・計測・通知・外部送信は行いません。対応機種は未確定です。</p>';
+
+export function devicesOfficeEntry(state) {
+  const r = reminderState(state);
+  return `<div class="daily-life-links">${go('<span class="daily-life-icon">◷</span><span><strong>つなぐ、からだの記録。</strong><small>時計と体組成計 / どちらも任意</small></span><span>›</span>', 'P05', 'daily-life-link')}${go(`<span class="daily-life-icon">〰</span><span><strong>仕事の合間に、ひと息。</strong><small>30秒からのながら運動 / ${state.office.sessions.length}回の記録例</small></span><span>›</span>`, 'P06', 'daily-life-link')}<p>${r.label}。機器がなくても使えます。</p></div>`;
+}
+export function scaleSummary(state) {
+  const available = scaleAvailable(state.devices);
+  return `<div class="card compact scale-summary"><span class="eyebrow">OPTIONAL / 長い目で見る変化</span><h2>体組成の記録も、参考に。</h2><p>${available ? `今週の体重 ${SCALE_SAMPLE.weight[3]} kg / 体脂肪率 ${SCALE_SAMPLE.bodyFat[3]} % のサンプル。` : '体組成計は任意です。未接続やデータ不足でも、今日のプランは確認できます。'} 4週間の傾向を、目標を見直す参考にします。</p>${go('機器と体組成の記録を見る →', 'P05', 'text-button')}</div>`;
+}
+function metric(label, values, unit, available) {
+  return `<div class="device-metric"><span>${label}</span><strong>${available ? values[3] : '—'}<small>${available ? unit : '未取得'}</small></strong></div>`;
+}
+function P05(state) {
+  const d = state.devices; const connected = state.premium.connected; const available = scaleAvailable(d);
+  const labels = { unread: '新しいデータの読み込み待ち', synced: 'サンプルを同期しました', missing: 'データが届いていません', stale: '古いデータのため数値を隠しています' };
+  return `${top('機器とからだの記録')}${heading('A LITTLE MORE ABOUT YOU', 'つなぐ、知る。<br>でも、なくても大丈夫。', '使いたい機器だけ、自分のためにつなぐ。')}
+  <section class="device-card"><div class="device-card-title"><span aria-hidden="true">◷</span><div><h2>スマートウォッチ</h2><p>${connected ? '接続中のサンプル' : '未接続'}</p></div></div><p>心拍・推定呼吸数を練習と同じ場面で。睡眠は今日のプランを考える参考に。</p>${btn(connected ? '時計の接続を解除する' : '時計の接続を試す', 'watch', connected ? 'disconnected' : 'connected', 'secondary')}${connected ? `${btn('時計のサンプルを同期する', 'deviceWatchRead', 'synced', 'primary')}<div class="device-sync-status" role="status"><strong>${labels[d.watchStatus]}</strong><span>最終同期：${d.watchTime ?? '未確認'}</span><span>データ元：時計のサンプル</span></div><details class="disclosure"><summary>取得できない場合を見る <span>＋</span></summary>${chips([['missing', '欠測'], ['stale', '古いデータ']], d.watchStatus, 'deviceWatchRead')}<p class="fine-print">新しい値を取得するまで、身体データを使った表示は控えます。</p></details>` : '<p class="fine-print">接続後も、自動で数値は表示しません。サンプルの同期を選べます。</p>'}${go('睡眠と今日のプランを見る →', 'P01', 'text-button')}${go('フォームと身体データを確認する →', 'M06', 'text-button')}</section>
+  <section class="device-card"><div class="device-card-title"><span aria-hidden="true">▱</span><div><h2>体組成計</h2><p>${d.scaleConnected ? '接続中のサンプル / 任意' : '未接続 / 任意'}</p></div></div><p>日ごとの数値に追われず、数週間の変化を目標の見直しの参考に。</p>${btn(d.scaleConnected ? '体組成計の接続を解除する' : '体組成計の接続を試す', 'scaleConnect', d.scaleConnected ? 'disconnected' : 'connected', 'secondary')}${d.scaleConnected ? `${btn('体組成のサンプルを同期する', 'scaleRead', 'synced')}<div class="device-sync-status" role="status"><strong>${labels[d.scaleStatus]}</strong><span>最終同期：${d.scaleTime ?? '未確認'}</span></div>` : ''}<div class="device-metrics">${metric('体重', SCALE_SAMPLE.weight, 'kg', available)}${metric('体脂肪率', SCALE_SAMPLE.bodyFat, '%', available)}${metric('筋肉量 / 推定', SCALE_SAMPLE.muscle, 'kg', available)}</div><p class="device-source">データ元：${SCALE_SAMPLE.source}<br>${available ? SCALE_SAMPLE.time : '同期できるまで、以前の値も表示しません。'}</p>
+  ${available ? `<div class="scale-trend"><span class="eyebrow">4 WEEKS / 傾向のサンプル</span><div class="scale-bars" aria-label="4週間の体重のサンプル推移">${SCALE_SAMPLE.weight.map((value, i) => `<div><span>${value}<small> kg</small></span><small>${SCALE_SAMPLE.weeks[i]}</small></div>`).join('')}</div><p>体重だけで成長を評価せず、体脂肪率・推定筋肉量の推移や、本人の目標も一緒に振り返ります。</p></div>` : '<div class="device-empty">数値と4週間の傾向は、同期できた場合に表示します。</div>'}
+  ${d.scaleConnected ? `<details class="disclosure"><summary>取得できない場合を見る <span>＋</span></summary>${chips([['missing', '欠測'], ['stale', '古いデータ']], d.scaleStatus, 'scaleRead')}</details>` : ''}<p class="fine-print">体脂肪率・筋肉量は機器の推定値です。これらの数値だけで、今日の練習強度を決めません。</p></section><p class="premium-privacy">◈ からだの記録は自分だけ。共有カード・チーム・SNSに含めません。</p>${note}`;
+}
+function setting(label, items, selected, field) {
+  return `<label class="office-setting">${label}<select data-action="reminderSetting" data-field="${field}" aria-label="${label}">${items.map(([id, text]) => `<option value="${id}" ${selected === id ? 'selected' : ''}>${text}</option>`).join('')}</select></label>`;
+}
+function P06(state) {
+  const o = state.office, exercise = OFFICE_EXERCISES[o.exercise], r = o.reminders, reminder = reminderState(state);
+  return `${top('仕事の合間のながら運動')}${heading('A LITTLE BREAK GOES A LONG WAY', 'がんばる合間に、<br>小さく、からだを動かす。', '30秒から2分。できるときだけ、あなたのペースで。')}
+  <div class="office-hero"><span aria-hidden="true">${exercise.icon}</span><div><span class="eyebrow">DESK BREAK / ${exercise.time}の目安</span><h2>${exercise.title}</h2></div></div>
+  ${o.status === 'ready' ? chips(Object.entries(OFFICE_EXERCISES).map(([id, item]) => [id, item.time + ' / ' + item.title]), o.exercise, 'officeExercise') : ''}<ol class="office-instructions">${exercise.steps.map((step) => `<li>${step}</li>`).join('')}</ol><p class="fine-print">痛みや不安があればやめて、休む選択を。機器は必要ありません。</p>
+  ${state.premium.active ? `<div class="notice">時計連動の練習が進行中です。こちらは練習後に。${go('進行中の練習に戻る →', 'P03', 'text-button')}</div>` : o.status === 'ready' ? `${btn('このひと息を始める', 'officeStart')}${btn('今回は見送る', 'officeSkip', '', 'text-button')}` : o.status === 'doing' ? `<div class="office-running"><span>ひと息の時間 / 操作サンプル</span><strong>${exercise.time}</strong><p>自動カウントはしません。自分のペースで動いて、終わったら下のボタンへ。</p></div>${btn('終えて、ひと息を記録する', 'officeFinish')}${btn('途中でやめる・今回は見送る', 'officeSkip', '', 'text-button')}` : `<div class="success-note">${o.status === 'done' ? '✓ このひと息を記録しました。' : '今回は見送りました。それでも大丈夫。'}</div>${btn('次の休憩の例を用意する', 'officeNext', '', 'secondary')}`}
+  <div class="office-record"><span>今日のひと息 / 画面内の記録例</span><strong>${o.sessions.length}<small>回</small></strong><p>小さな休憩も、今日の積み重ねに。記録はこのデモ内だけです。</p></div>
+  <section class="device-card reminder-card"><span class="eyebrow">A GENTLE REMINDER</span><h2>忙しい日は、そっとお知らせ。</h2><p>通知は任意です。会議中は休止し、今は難しいときは見送れます。</p>${chips([['off', '通知なし'], ['on', 'お知らせを使う']], r.enabled ? 'on' : 'off', 'reminderSetting', 'enabled')}${r.enabled ? `${setting('通知する日', [['weekdays', '平日'], ['everyday', '毎日']], r.days, 'days')}${setting('仕事の時間帯', [['9-18', '9:00〜18:00'], ['10-19', '10:00〜19:00']], r.hours, 'hours')}${setting('お知らせの間隔', [['30', '30分'], ['60', '60分'], ['90', '90分']], r.interval, 'interval')}<div class="office-reminder-actions">${btn(r.quiet ? '会議・集中時間の休止を解除する' : '会議・集中時間は休止する', 'reminderQuiet', r.quiet ? 'off' : 'on', 'secondary')}${r.snoozed ? btn('お知らせを再開する', 'reminderResume', '', 'secondary') : btn('あとで（再開するまで停止）', 'reminderSnooze', '', 'text-button')}</div>` : ''}<div class="reminder-state" role="status"><strong>${reminder.label}</strong><p>${reminder.message}</p></div>${btn('デモで通知を見る', 'reminderPreview', '', 'secondary')}
+  ${o.preview ? reminder.status === 'ready' ? `<div class="reminder-preview" role="status"><span>FORMMATE / 通知の表示例</span><h3>そろそろ、ひと息いれませんか？</h3><p>${exercise.time}の小さな運動を。今は難しければ、あとで大丈夫。</p>${o.status === 'ready' ? btn('やってみる', 'officeStart', '', 'primary small') : btn('次の休憩の例を用意する', 'officeNext', '', 'secondary')}${btn('あとで', 'reminderSnooze', '', 'text-button')}</div>` : `<div class="notice" role="status">${reminder.label}。通知は出しません。</div>` : ''}<p class="fine-print">これはアプリ内の通知プレビューです。実際のスマホ通知や予定の自動配信は行いません。「あとで」は再開を選ぶまで続きます。</p></section>${note}`;
+}
+export const DEVICES_OFFICE_VIEWS = { P05, P06 };

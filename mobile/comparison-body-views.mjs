@@ -1,5 +1,5 @@
-import { BODY_SCENARIOS, comparisonBodyReading } from './comparison-body.mjs?v=20261106-form-body';
-import { escapeHtml as e } from './illustrations.mjs?v=20261106-form-body';
+import { BODY_SCENARIOS, comparisonBodyReading } from './comparison-body.mjs?v=20261106-devices-office';
+import { escapeHtml as e } from './illustrations.mjs?v=20261106-devices-office';
 
 const button = (label, action, value = '', cls = 'chip', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${label}</button>`;
 export function renderComparisonBody(state) {

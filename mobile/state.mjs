@@ -1,5 +1,6 @@
-import { createPremium, reducePremium } from './premium.mjs?v=20261106-form-body';
-import { createComparisonBody, BODY_SCENARIOS } from './comparison-body.mjs?v=20261106-form-body';
+import { createPremium, reducePremium } from './premium.mjs?v=20261106-devices-office';
+import { createComparisonBody, BODY_SCENARIOS } from './comparison-body.mjs?v=20261106-devices-office';
+import { createDevices, createOffice, reduceDevicesOffice } from './devices-office.mjs?v=20261106-devices-office';
 
 export const SCREENS = Object.freeze([
   ['O01', '初回ヒアリング', 'setup'], ['O02', '身体・動作チェック', 'setup'], ['O03', '開始プラン', 'setup'],
@@ -9,6 +10,7 @@ export const SCREENS = Object.freeze([
   ['M10', 'チーム・交流', 'community'], ['M11', '約練日の調整', 'community'], ['M12', '学ぶ', 'learn'],
   ['M13', 'レッスン・Live', 'learn'], ['M14', 'イベント・特典', 'learn'], ['M15', 'マイページ', 'my'],
   ['P01', '睡眠・回復状況', 'home'], ['P02', '今日のプラン', 'home'], ['P03', 'からだ連動の練習', 'practice'], ['P04', 'からだの振り返り', 'my'],
+  ['P05', '機器とからだの記録', 'my'], ['P06', '仕事の合間のながら運動', 'home'],
 ].map(([id, title, tab]) => Object.freeze({ id, title, tab })));
 
 export const COACHES = Object.freeze([
@@ -30,7 +32,7 @@ const OPTIONS = { goal: ['habit', 'form', 'strength'], experience: ['new', 'some
 
 export function createState() {
   return {
-    screen: 'O01', premium: createPremium(), profile: { goal: 'habit', experience: 'new', minutes: '5', equipment: 'none' },
+    screen: 'O01', premium: createPremium(), devices: createDevices(), office: createOffice(), profile: { goal: 'habit', experience: 'new', minutes: '5', equipment: 'none' },
     check: 'none', onboardingDone: false, planCustomized: false, focus: 'form', coach: 'mina', exercise: 'squat', level: '01',
     phase: 0, compareView: 'split', captured: false, result: null, history: [], captureSerial: 0, comparisonBody: createComparisonBody(),
     edit: { layout: 'split', captions: true, scene: 'improvement' },
@@ -65,10 +67,13 @@ export function reduce(state, action) {
   const next = structuredClone(state);
   const clearResult = () => { next.result = null; next.captured = false; next.share.confirmed = false; next.comparisonBody = createComparisonBody(); };
   switch (action.type) {
+    case 'deviceWatchRead': case 'scaleConnect': case 'scaleRead': case 'officeExercise': case 'officeStart': case 'officeFinish': case 'officeSkip': case 'officeNext': case 'reminderSetting': case 'reminderQuiet': case 'reminderSnooze': case 'reminderResume': case 'reminderPreview':
+      return reduceDevicesOffice(next, action);
     case 'recoverySample': case 'fatigue': case 'dailyPlan': case 'liveSample':
       next.premium = reducePremium(next.premium, action); break;
     case 'watch':
       next.premium = reducePremium(next.premium, action);
+      next.devices.watchStatus = 'unread'; next.devices.watchTime = null;
       next.comparisonBody.fresh = false; next.comparisonBody.captureId = null; break;
     case 'comparisonScenario':
       if (!next.result || next.comparisonBody.history) throw new Error('新しい撮影サンプルを選んでください。');
@@ -90,6 +95,7 @@ export function reduce(state, action) {
     case 'acceptDailyPlan':
       next.premium = reducePremium(next.premium, action); break;
     case 'startLive':
+      if (next.office.status === 'doing') throw new Error('ながら運動を終了してから、時計連動の練習を始めましょう。');
       next.premium = reducePremium(next.premium, action); next.screen = 'P03'; break;
     case 'finishLive':
       next.premium = reducePremium(next.premium, action); next.screen = 'P04'; break;

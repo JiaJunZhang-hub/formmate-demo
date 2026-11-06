@@ -1,5 +1,5 @@
-import { SCREENS, createState, reduce, initialScreen } from './state.mjs?v=20261106-form-body';
-import { renderScreen, renderTabs } from './views.mjs?v=20261106-form-body';
+import { SCREENS, createState, reduce, initialScreen } from './state.mjs?v=20261106-devices-office';
+import { renderScreen, renderTabs } from './views.mjs?v=20261106-devices-office';
 
 let state = createState();
 let ui = { unassessable: false, busy: false };

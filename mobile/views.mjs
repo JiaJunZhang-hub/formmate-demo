@@ -1,7 +1,8 @@
-import { SCREENS, COACHES, FOCUSES, EXERCISES, getCoach, getExercise, recommendation } from './state.mjs?v=20261106-form-body';
-import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs?v=20261106-form-body';
-import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs?v=20261106-form-body';
-import { renderComparisonBody } from './comparison-body-views.mjs?v=20261106-form-body';
+import { SCREENS, COACHES, FOCUSES, EXERCISES, getCoach, getExercise, recommendation } from './state.mjs?v=20261106-devices-office';
+import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs?v=20261106-devices-office';
+import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs?v=20261106-devices-office';
+import { renderComparisonBody } from './comparison-body-views.mjs?v=20261106-devices-office';
+import { DEVICES_OFFICE_VIEWS, devicesOfficeEntry, scaleSummary } from './devices-office-views.mjs?v=20261106-devices-office';
 
 export const button = (label, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${label}</button>`;
 const go = (label, screen, cls = 'primary') => button(label, 'navigate', screen, cls);
@@ -86,15 +87,16 @@ function M15(state) {
   return `<div class="profile-top"><span class="profile-avatar">me<span>✳</span></span><div><span class="eyebrow">MY LITTLE PROGRESS</span><h1>わたしのペース</h1><p>自分の変化を、自分のために。</p></div></div><div class="stats"><div><strong>${state.history.length}<small>回</small></strong><span>練習の記録</span></div><div><strong>${state.planned.length + (state.eventStatus === 'planned' ? 1 : 0)}<small>件</small></strong><span>参加予定の例</span></div><div><strong>${state.reward === 'eligible' ? 1 : 0}<small>件</small></strong><span>条件達成の例</span></div></div><div class="section-label"><h2>わたしの成長</h2>${tag('サンプル記録')}</div>${state.history.length ? state.history.map((item, index) => ({ item, index })).slice(-3).reverse().map(({ item, index }) => `<div class="history-row"><span class="history-icon">↗</span><div><strong>${getExercise(item.exercise).name}</strong><span>${getCoach(item.coach).name} / LEVEL ${item.level} / ${FOCUSES.find(({ id }) => id === item.focus).name}</span></div>${button('見る', 'history', index, 'inline-link')}</div>`).join('') : '<div class="empty-state"><span>✧</span><h3>最初の「できた」を、ここに。</h3><p>練習デモを試すと、記録の例が表示されます。</p></div>'}${listLink('◎', '種目別レベル', `${getExercise(state.exercise).name} / LEVEL ${state.level} の表示例`, 'M02')}${listLink('◷', '参加予定', state.planned.length ? 'レッスン・Liveの予定例あり' : '次に学びたいことを探そう', 'M12')}${listLink('✧', 'イベント・特典', state.reward === 'eligible' ? '条件達成の表示例を確認' : '条件と進捗を確認', 'M14')}${listLink('◈', '動画・共有設定', `現在の範囲：${{ private: '自分だけ', team: 'チーム内', sns: '外部SNS' }[state.share.destination]}`, 'M08')}${listLink('↻', '開始プランを見直す', '回答と基本動作のチェックへ', 'O01')}<details class="disclosure"><summary>このモックのデータについて <span>＋</span></summary><p>データはこの画面を開いている間だけ保持します。カメラ・外部通信・アカウント保存はありません。ページの再読み込みや「最初からやり直す」で消えます。</p>${button('モックを最初からやり直す', 'reset', '', 'text-button')}</details>`;
 }
 
-const VIEWS = { O01, O02, O03, M01, M02, M03, M04, M05, M06, M07, M08, M09, M10, M11, M12, M13, M14, M15, ...PREMIUM_VIEWS };
+const VIEWS = { O01, O02, O03, M01, M02, M03, M04, M05, M06, M07, M08, M09, M10, M11, M12, M13, M14, M15, ...PREMIUM_VIEWS, ...DEVICES_OFFICE_VIEWS };
 export function renderScreen(id, state, ui = {}) {
   if (!VIEWS[id]) throw new RangeError('表示できる画面がありません。');
   let content = VIEWS[id](state, ui);
   if (id === 'M06' && state.result) content = content.replace('<div class="small-stats">', `${renderComparisonBody(state)}<div class="small-stats">`);
-  if (id === 'M01') content = content.replace('<div class="today-card">', `${premiumEntry(state)}<div class="today-card">`);
+  if (id === 'M01') content = content.replace('<div class="today-card">', `${devicesOfficeEntry(state)}${premiumEntry(state)}<div class="today-card">`);
   if (id === 'M01') content = content.replace('<div class="today-card"><div>', `<div class="today-card"><div>${go('回復に合わせた今日のプラン →', 'P02', 'inline-link')}`);
   if (id === 'M02' && state.premium.active) content = `<div class="notice"><strong>からだ連動の練習が進行中です</strong>${go('練習中の画面に戻る →', 'P03', 'text-button')}</div>${content}`;
-  if (id === 'M15') content = content.replace('<div class="stats">', `${premiumEntry(state)}<div class="stats">`);
+  if (id === 'M15') content = content.replace('<div class="stats">', `${devicesOfficeEntry(state)}${premiumEntry(state)}<div class="stats">`);
+  if (id === 'P01') content += scaleSummary(state);
   return `<div class="page" data-screen="${id}">${content}<div class="screen-footnote">${id} · FORM MATE / すべて操作用サンプル</div></div>`;
 }
 export function renderTabs(state) {
