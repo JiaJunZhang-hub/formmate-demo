@@ -1,6 +1,7 @@
-import { SCREENS, COACHES, FOCUSES, EXERCISES, getCoach, getExercise, recommendation } from './state.mjs';
-import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs?v=20261106-natural-2';
-import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs?v=20261106-natural-2';
+import { SCREENS, COACHES, FOCUSES, EXERCISES, getCoach, getExercise, recommendation } from './state.mjs?v=20261106-form-body';
+import { escapeHtml as e, portrait, movement, groupArt } from './illustrations.mjs?v=20261106-form-body';
+import { PREMIUM_VIEWS, premiumEntry } from './premium-views.mjs?v=20261106-form-body';
+import { renderComparisonBody } from './comparison-body-views.mjs?v=20261106-form-body';
 
 export const button = (label, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${label}</button>`;
 const go = (label, screen, cls = 'primary') => button(label, 'navigate', screen, cls);
@@ -42,7 +43,7 @@ function M05(state, ui) {
   return `${topBack('M04', '撮影の準備')}${heading('READY WHEN YOU ARE', ui.unassessable ? 'もう一度、<br>全身が映る位置へ。' : '準備ができたら、<br>あなたの一回を。', ui.unassessable ? '判定不足の例：足元が見えず、比較できませんでした。' : 'スマホを固定して、自分のペースで。')}${ui.unassessable ? '<div class="notice">動きの評価はしていません。撮影位置を調整するイメージです。</div>' : ''}<div class="camera-card"><div class="camera-top">${tag('サンプル撮影')}<span>横から / 全身を入れる</span></div><div class="viewfinder">${pose(state)}<i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></div></div><ul class="number-list"><li><span>1</span>スマホは動かない場所に固定</li><li><span>2</span>手足が画面からはみ出さない位置へ</li><li><span>3</span>痛みや不安があるときは無理をしない</li></ul>${button('● サンプルで撮影する', 'busyCapture')}${note('カメラには接続しません。ボタンで撮影〜比較の操作イメージを確認できます。')}`;
 }
 function M06(state) {
-  if (!state.result) return `${topBack('M05', '比較・フィードバック')}${heading('ONE STEP AT A TIME', 'まずは、動きの<br>サンプルを選ぼう。', 'まだ比較する練習結果がありません。')}${movement({ phase: 1 })}${go('撮影ガイドへ →', 'M05')}${state.captured ? button('サンプルを比較する', 'analyze') : ''}`;
+  if (!state.result) return `${topBack('M05', '比較・フィードバック')}${heading('ONE STEP AT A TIME', '動きも、からだも。<br>同じ場面で、見てみよう。', 'フォーム比較と身体データの操作サンプルです。')}${movement({ phase: 1 })}${button('フォームと身体データの例を見る →', 'watchCompare')}${go('撮影ガイドへ →', 'M05', 'secondary')}${state.captured ? button('サンプルを比較する', 'analyze') : ''}${note('実際の撮影・計測は行いません。時計なしでもフォームを比較できます。')}`;
   const coach = getCoach(state.coach); const focus = FOCUSES.find(({ id }) => id === state.focus);
   const cues = { form: 'お手本と同じ場面で、体の位置を見比べよう。', control: '動きの途中と戻る場面の、つながりに注目。', rhythm: '動き出しと切り替えの、ペースを見てみよう。' };
   return `${topBack('M05', '比較・フィードバック')}<div class="page-heading short"><span class="eyebrow">YOUR NEXT LITTLE STEP</span><h1>次の一回は、<br>ここに注目。</h1></div><div class="feedback-card"><span>✧ ${focus.name} / フィードバック例</span><h2>${cues[state.focus]}</h2><p>観察・助言は固定サンプルです。実際の動作を解析した結果ではありません。</p></div>${choices([['reference', 'お手本'], ['split', '並べて'], ['self', '自分']], state.compareView, 'compareView')}<div class="comparison-preview ${state.compareView === 'split' ? 'is-split' : ''}">${state.compareView !== 'self' ? `<div><span>${coach.name} のお手本</span>${pose(state)}</div>` : ''}${state.compareView !== 'reference' ? `<div><span>あなた / サンプル</span>${pose(state, true)}</div>` : ''}</div><div class="phase-buttons" aria-label="同期して場面を切り替える">${[0, 1, 2].map((p) => button(['はじめ', '途中', '戻る'][p], 'phase', p, `chip ${state.phase === p ? 'selected' : ''}`, `aria-pressed="${state.phase === p}"`)).join('')}</div><div class="small-stats"><span>今回の段階<strong>LEVEL ${state.level}</strong></span><span>前回との変化<strong>${state.history.length > 1 ? '再挑戦を記録' : '初回の記録'}</strong></span></div><details class="disclosure"><summary>評価項目を詳しく見る <span>＋</span></summary><p>今回の重点：${focus.subtitle}。撮影条件・体格などを考慮した評価基準は検討中です。身体能力やけがの有無は判定しません。</p></details>${go('成長を、見せたい一枚に →', 'M07')}${go('同じ条件でもう一回', 'M05', 'text-button')}`;
@@ -89,6 +90,7 @@ const VIEWS = { O01, O02, O03, M01, M02, M03, M04, M05, M06, M07, M08, M09, M10,
 export function renderScreen(id, state, ui = {}) {
   if (!VIEWS[id]) throw new RangeError('表示できる画面がありません。');
   let content = VIEWS[id](state, ui);
+  if (id === 'M06' && state.result) content = content.replace('<div class="small-stats">', `${renderComparisonBody(state)}<div class="small-stats">`);
   if (id === 'M01') content = content.replace('<div class="today-card">', `${premiumEntry(state)}<div class="today-card">`);
   if (id === 'M01') content = content.replace('<div class="today-card"><div>', `<div class="today-card"><div>${go('回復に合わせた今日のプラン →', 'P02', 'inline-link')}`);
   if (id === 'M02' && state.premium.active) content = `<div class="notice"><strong>からだ連動の練習が進行中です</strong>${go('練習中の画面に戻る →', 'P03', 'text-button')}</div>${content}`;

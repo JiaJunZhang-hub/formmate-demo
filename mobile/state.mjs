@@ -1,4 +1,5 @@
-import { createPremium, reducePremium } from './premium.mjs';
+import { createPremium, reducePremium } from './premium.mjs?v=20261106-form-body';
+import { createComparisonBody, BODY_SCENARIOS } from './comparison-body.mjs?v=20261106-form-body';
 
 export const SCREENS = Object.freeze([
   ['O01', '初回ヒアリング', 'setup'], ['O02', '身体・動作チェック', 'setup'], ['O03', '開始プラン', 'setup'],
@@ -31,7 +32,7 @@ export function createState() {
   return {
     screen: 'O01', premium: createPremium(), profile: { goal: 'habit', experience: 'new', minutes: '5', equipment: 'none' },
     check: 'none', onboardingDone: false, planCustomized: false, focus: 'form', coach: 'mina', exercise: 'squat', level: '01',
-    phase: 0, compareView: 'split', captured: false, result: null, history: [],
+    phase: 0, compareView: 'split', captured: false, result: null, history: [], captureSerial: 0, comparisonBody: createComparisonBody(),
     edit: { layout: 'split', captions: true, scene: 'improvement' },
     share: { format: 'card', destination: 'private', showLevel: false, confirmed: false },
     team: 'none', comments: [], encouraged: false, schedule: { date: 'sat', location: 'park', status: 'none' },
@@ -62,10 +63,30 @@ export function recommendation(state) {
 
 export function reduce(state, action) {
   const next = structuredClone(state);
-  const clearResult = () => { next.result = null; next.captured = false; next.share.confirmed = false; };
+  const clearResult = () => { next.result = null; next.captured = false; next.share.confirmed = false; next.comparisonBody = createComparisonBody(); };
   switch (action.type) {
-    case 'recoverySample': case 'fatigue': case 'watch': case 'dailyPlan': case 'liveSample':
+    case 'recoverySample': case 'fatigue': case 'dailyPlan': case 'liveSample':
       next.premium = reducePremium(next.premium, action); break;
+    case 'watch':
+      next.premium = reducePremium(next.premium, action);
+      next.comparisonBody.fresh = false; next.comparisonBody.captureId = null; break;
+    case 'comparisonScenario':
+      if (!next.result || next.comparisonBody.history) throw new Error('新しい撮影サンプルを選んでください。');
+      next.comparisonBody.scenario = oneOf(action.value, Object.keys(BODY_SCENARIOS), '身体データの場面');
+      next.comparisonBody.fresh = next.premium.connected;
+      next.comparisonBody.captureId = next.result.captureId; break;
+    case 'comparisonRead':
+      if (!next.result || next.comparisonBody.history) throw new Error('新しい撮影サンプルを選んでください。');
+      if (!next.premium.connected) throw new Error('時計の接続サンプルを選んでください。');
+      next.comparisonBody.fresh = true; next.comparisonBody.captureId = next.result.captureId; break;
+    case 'watchCompare': {
+      next.captureSerial += 1; next.captured = true; next.phase = 0;
+      next.result = { coach: next.coach, focus: next.focus, exercise: next.exercise, level: next.level, sample: true, captureId: next.captureSerial };
+      next.history.push({ ...next.result });
+      next.share = { format: 'card', destination: 'private', showLevel: false, confirmed: false };
+      next.comparisonBody = { ...createComparisonBody(), scenario: next.premium.live === 'elevated' ? 'elevated' : 'normal', fresh: next.premium.connected && next.premium.live !== 'missing', captureId: next.captureSerial };
+      next.screen = 'M06'; break;
+    }
     case 'acceptDailyPlan':
       next.premium = reducePremium(next.premium, action); break;
     case 'startLive':
@@ -82,16 +103,16 @@ export function reduce(state, action) {
     case 'coach': getCoach(action.value); next.coach = action.value; clearResult(); break;
     case 'exercise': getExercise(action.value); next.exercise = action.value; clearResult(); break;
     case 'level': next.level = oneOf(action.value, ['01', '02', '03'], 'レベル'); clearResult(); break;
-    case 'capture': next.captured = true; next.result = null; next.share = { format: 'card', destination: 'private', showLevel: false, confirmed: false }; next.screen = 'M06'; break;
-    case 'unassessable': next.captured = false; next.result = null; next.screen = 'M05'; break;
+    case 'capture': next.captureSerial += 1; next.phase = 0; next.comparisonBody = createComparisonBody(); next.captured = true; next.result = null; next.share = { format: 'card', destination: 'private', showLevel: false, confirmed: false }; next.screen = 'M06'; break;
+    case 'unassessable': next.captured = false; next.result = null; next.comparisonBody = createComparisonBody(); next.screen = 'M05'; break;
     case 'analyze':
       if (!next.captured) throw new Error('まず撮影サンプルを選んでください。');
-      if (!next.result) next.history.push({ coach: next.coach, focus: next.focus, exercise: next.exercise, level: next.level, sample: true });
-      next.result = { coach: next.coach, focus: next.focus, exercise: next.exercise, level: next.level, sample: true };
+      if (!next.result) next.history.push({ coach: next.coach, focus: next.focus, exercise: next.exercise, level: next.level, sample: true, captureId: next.captureSerial });
+      next.result = { coach: next.coach, focus: next.focus, exercise: next.exercise, level: next.level, sample: true, captureId: next.captureSerial };
       break;
     case 'history': {
       if (!Number.isInteger(action.value) || !next.history[action.value]) throw new RangeError('練習記録がありません。');
-      const record = next.history[action.value]; Object.assign(next, { coach: record.coach, focus: record.focus, exercise: record.exercise, level: record.level, captured: true, result: { ...record }, screen: 'M06' }); break;
+      const record = next.history[action.value]; Object.assign(next, { coach: record.coach, focus: record.focus, exercise: record.exercise, level: record.level, captured: true, result: { ...record }, screen: 'M06', phase: 0, comparisonBody: { ...createComparisonBody(), history: true } }); break;
     }
     case 'phase': if (!Number.isInteger(action.value)) throw new RangeError('場面は整数で指定してください。'); next.phase = oneOf(action.value, [0, 1, 2], '場面'); break;
     case 'compareView': next.compareView = oneOf(action.value, ['split', 'reference', 'self'], '比較表示'); break;

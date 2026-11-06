@@ -1,5 +1,5 @@
-import { RECOVERY_SAMPLES, DAILY_PLANS, LIVE_SAMPLES, recoveryProposal, currentDailyPlan, liveReading } from './premium.mjs';
-import { escapeHtml as e } from './illustrations.mjs?v=20261106-natural-2';
+import { RECOVERY_SAMPLES, DAILY_PLANS, LIVE_SAMPLES, recoveryProposal, currentDailyPlan, liveReading } from './premium.mjs?v=20261106-form-body';
+import { escapeHtml as e } from './illustrations.mjs?v=20261106-form-body';
 
 const btn = (text, action, value = '', cls = 'primary', extra = '') => `<button class="${cls}" data-action="${action}" data-value="${e(value)}" ${extra}>${text}</button>`;
 const go = (text, id, cls = 'primary') => btn(text, 'navigate', id, cls);
@@ -37,6 +37,7 @@ function P03(state) {
   return `${back('P02', 'からだ連動の練習')}${title('LISTEN TO YOUR BODY', '今のペースを、<br>からだと相談。', `${plan.name} / 練習中のサンプル`)}<div class="between"><span class="live-label"><i></i> ${p.connected ? '接続中の表示例' : '接続が切れた表示例'}</span>${btn(p.connected ? '切断を試す' : '再接続を試す', 'watch', p.connected ? 'disconnected' : 'connected', 'inline-link')}</div><div class="live-heart ${reading.priority}"><span>心拍数 / 架空の値</span><strong>${reading.heart ?? '—'}<small>${reading.heart ? 'bpm' : '計測できません'}</small></strong><svg viewBox="0 0 280 48" aria-hidden="true"><path d="M0 30H45l8-8 9 17 9-31 10 35 10-13h47l8-8 9 17 9-31 10 35 10-13h96"/></svg><span>${reading.heart ? '数値から自動判定している表示ではありません' : '古い値を現在値として表示しません'}</span></div><div class="live-coaching ${reading.priority}" role="status"><span class="eyebrow">${reading.priority === 'unknown' ? 'DATA STATUS' : 'COACHING SAMPLE'}</span><h2>${reading.label}</h2><p>${reading.cue}</p></div><div class="small-stats"><span>ランニング時のペース例<strong>${reading.pace ? `${reading.pace} /km` : '取得できません'}</strong></span><span>表示を進めた回数<strong>${p.tick}<small>ステップ</small></strong></span></div>
   <div class="respiration-card"><span>呼吸数 / 推定値のサンプル</span><strong>${reading.respiration ?? '—'}<small>${reading.respiration ? '回/分' : '取得できません'}</small></strong><p>${reading.respiration ? '対応機器が運動中の推定呼吸数を提供できる場合の表示例です。' : '非対応・欠測・接続切断のときは推定値を表示しません。'} 機種・運動種別・アプリへのデータ提供条件によって異なります。</p></div>
   <section class="question"><h2>練習中の変化を試す</h2>${chips(Object.entries(LIVE_SAMPLES).map(([id, value]) => [id, value.name]), p.live, 'liveSample')}<p class="fine-print">ボタンで架空の場面を進めます。同じ助言は連続表示を抑え、データ不足を優先します。自動計測・音声再生はありません。</p></section>
+  <div class="card compact"><h2>フォームも、一緒に確かめる。</h2><p>新しい比較サンプルを開き、同じ場面の動き・心拍・推定呼吸数を見られます。進行中の練習は保ちます。</p>${btn('フォームと身体データの例を見る →', 'watchCompare', '', 'secondary')}</div>
   <details class="disclosure"><summary>呼吸・歩幅・左右バランスについて <span>＋</span></summary><p>呼吸の声かけはリマインダーです。息が止まったことを検出した表示ではありません。歩幅だけでフォームを判定せず、左右の接地時間などは対応機種・外部センサーや動画での確認が必要です。実機での取得方法は未確定です。</p></details>${btn('練習の例を終了して振り返る →', 'finishLive')}${privacy}${disclaimer}`;
 }
 function P04(state) {
