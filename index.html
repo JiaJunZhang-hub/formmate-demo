@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./practice.css">
   <link rel="stylesheet" href="./motivation.css">
-  <link rel="stylesheet" href="./assessment.css?v=20261106-result-screens">
-  <script type="module" src="./app.mjs?v=20261106-result-screens"></script>
+  <link rel="stylesheet" href="./assessment.css?v=20261106-number-fix">
+  <script type="module" src="./app.mjs?v=20261106-number-fix"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-testid="skip-link">本文へ移動</a>
@@ -65,47 +65,6 @@
       <p class="eyebrow">A NEW WAY TO KEEP MOVING</p><h2 id="intro-title">何をすればいいか分からない。<br>だから、最初を一緒につくる。</h2>
       <p id="intro-description" class="section-description">自分の動きと目的を知り、合う練習とトレーナーの提案へ。<br>お手本と比べ、確認しながら、次にやることを見つける構想です。</p>
         <div class="feature-line flow-steps"><article><span class="feature-number">01</span><h3>今の自分を知る</h3><p>スマホで簡単な動作を試し、<br>確認できる特徴と目的を整理。</p></article><article><span class="feature-number">02</span><h3>合う練習とお手本の提案</h3><p>今の状態と目的に合わせて、<br>メニューとトレーナーをおすすめ。</p></article><article><span class="feature-number">03</span><h3>お手本との違いを見つける</h3><p>自分の動きをお手本と比べて、<br>次に意識することを見つける。</p></article><article><span class="feature-number">04</span><h3>アドバイスをもらう</h3><p>AIやトレーナーのヒントから、<br>次の一歩を決める。</p></article><article><span class="feature-number">05</span><h3>結果を仲間にシェアする</h3><p>できたことや気づきを、<br>仲間と分かち合う。</p></article></div>
-    </section>
-
-    <section id="self-check" class="self-check-section wrap" aria-label="ユースケース：48歳男性の最初の5分">
-      <div class="self-check-layout">
-        <div class="self-check-intro"><p class="eyebrow">USE CASE / 01</p><div class="scenario-card"><span>48歳・デスクワーク中心</span><strong>運動不足。まずは家で5分。</strong><div class="scenario-profile"><span>172cm / 78kg</span><span>運動は月1回</span><span>自宅・道具なし</span></div></div></div>
-        <ol class="comic-strip" aria-label="FormMateの使い方を4コマで表した例">
-          <li class="comic-panel"><span class="comic-number">1</span>
-            <div class="panel-screen input-screen"><span class="screen-label">INPUT</span>
-              <div class="screen-row"><span>身長</span><strong>172cm</strong></div>
-              <div class="screen-row"><span>体重</span><strong>78kg</strong></div>
-              <div class="screen-photo">📷 正面・横の写真</div>
-            </div>
-            <strong class="panel-caption">入力する</strong>
-          </li>
-          <li class="comic-arrow" aria-hidden="true">→</li>
-          <li class="comic-panel"><span class="comic-number">2</span>
-            <div class="panel-screen result-screen"><span class="screen-label">RESULT ・サンプル</span>
-              <div class="screen-badge">体力レベルの目安：初級</div>
-              <div class="screen-badge">姿勢の傾向：やや前かがみ</div>
-              <div class="screen-recommend">おすすめ：椅子スクワット 5回</div>
-            </div>
-            <strong class="panel-caption">提案を見る</strong>
-          </li>
-          <li class="comic-arrow" aria-hidden="true">→</li>
-          <li class="comic-panel"><span class="comic-number">3</span>
-            <div class="panel-screen compare-screen"><span class="screen-label">COMPARE</span>
-              <div class="compare-row"><div class="compare-thumb">あなた</div><div class="compare-thumb">お手本</div></div>
-              <div class="compare-note">肘の角度を比べてみよう</div>
-            </div>
-            <strong class="panel-caption">比べる</strong>
-          </li>
-          <li class="comic-arrow" aria-hidden="true">→</li>
-          <li class="comic-panel"><span class="comic-number">4</span>
-            <div class="panel-screen advice-screen"><span class="screen-label">ADVICE</span>
-              <div class="advice-bubble">肘を少し体側へ。<br>次は5回、ゆっくり動こう。</div>
-            </div>
-            <strong class="panel-caption">次を決める</strong>
-          </li>
-        </ol>
-        <p class="self-check-concept">体力レベル・姿勢の表示はサンプルです。実際の身体を診断するものではありません。<a class="self-check-cta" href="#demo" data-testid="self-check-demo">この体験を見る <span aria-hidden="true">↗</span></a></p>
-      </div>
     </section>
 
     <section id="demo" class="demo-section section" aria-labelledby="demo-title">
@@ -171,6 +130,85 @@
     <section id="team" class="team-section wrap" aria-labelledby="team-title"><div class="team-visual" role="img" aria-label="公園で仲間と集まり、目標に挑戦するイメージ"><svg viewBox="0 0 580 470" aria-hidden="true"><circle cx="271" cy="222" r="192" fill="#e0e6d5"/><circle cx="419" cy="107" r="39" fill="#f1dca6"/><path d="M28 369q200-83 522-5v106H28Z" fill="#bdcbae"/><path d="M68 407q180-39 434 0" stroke="#9eaf90" stroke-width="2" fill="none"/><path d="M91 303V110m0 134q-87-42-33-93 42 10 33 93m0-46q75-27 41-78-49 10-41 78" fill="#79936e" stroke="#79936e" stroke-width="6"/><g color="#b87963" transform="translate(99 140) scale(.8)"><use href="#standing-person" width="220" height="270"/></g><g color="#d4ae5f" transform="translate(254 112) scale(.9)"><use href="#squat-person" width="220" height="270"/></g><g color="#6e8d81" transform="translate(375 172) scale(.66)"><use href="#standing-person" width="220" height="270"/></g><path d="m205 112 10-20m18 30 21-7m-30-27-1-18" stroke="#b87963" stroke-width="4" stroke-linecap="round"/></svg><div class="team-note"><span aria-hidden="true">⚑</span><div><small>チーム目標の例</small><strong>練習の先に、一緒に挑む日を。</strong><span>コーチに学び、成長を持ち寄る仲間と。</span></div></div></div><div class="team-copy"><p class="eyebrow">LEARN. SHARE. TAKE THE NEXT STEP.</p><h2 id="team-title">次の「できた」を、<br>仲間と<span class="underlined">楽しみに。</span></h2><p>成長動画に反応したり、同じレッスンの気づきを話したり。<br>まずは好きなこと・学びたいことでつながる。<br>次は実際に集まって、一緒に挑戦する日に。</p><ul class="team-points"><li><span aria-hidden="true">✓</span>練習後の共有カードから、気づきや悩みを話す</li><li><span aria-hidden="true">✓</span>好きなコーチの課題を、それぞれのレベルで</li><li><span aria-hidden="true">✓</span>次の約練日やイベントで、成果を一緒に確かめる</li></ul><span class="planned-tag">チーム機能は企画中です</span></div></section>
 
     <section id="faq" class="section wrap faq-section" aria-labelledby="faq-title"><div><p class="eyebrow">GOOD TO KNOW</p><h2 id="faq-title">気になること、<br>ここで解決。</h2><p class="section-side-note">はじめての一歩に、安心を。</p></div><div class="faq-list"><details><summary data-testid="faq-beginner">運動が苦手でも使えますか？<span aria-hidden="true">+</span></summary><p>初心者が自分のペースで始められるサービスを目指しています。今のレベルに合うお手本を選び、小さな課題から取り組む構想です。</p></details><details><summary data-testid="faq-video">撮った動画は、ほかの人に見られますか？<span aria-hidden="true">+</span></summary><p>このページは紹介デモのため、動画を撮影・送信・保存する機能はありません。正式なサービスでは、動画や評価を誰に共有するかを自分で選べる設計を検討しています。</p></details><details><summary data-testid="faq-team">知らない人との対面参加は必須ですか？<span aria-hidden="true">+</span></summary><p>一人での練習も、知り合いや新しい仲間とのチーム活動も想定しています。対面活動の参加方式やルールは検討中です。このページで募集や予約は受け付けていません。</p></details><details><summary data-testid="faq-price">利用料金はいくらですか？<span aria-hidden="true">+</span></summary><p>料金はまだ確定していません。このページのデモは登録不要・無料で操作できます。実際のAI解析やトレーナーの添削は含まれません。</p></details><details><summary data-testid="faq-trainer">登場するトレーナーは実在しますか？<span aria-hidden="true">+</span></summary><p>デモ内の人物・コース・評価は、体験を伝えるための架空のサンプルです。実在するトレーナーとの契約・提携・推薦を示すものではありません。</p></details></div></section>
+
+    <section id="self-check" class="self-check-section wrap" aria-label="ユースケース">
+      <div class="self-check-layout">
+        <div class="self-check-intro"><p class="eyebrow">USE CASE / 01</p><div class="scenario-card"><span>48歳・デスクワーク中心</span><strong>運動不足。まずは家で5分。</strong><div class="scenario-profile"><span>172cm / 78kg</span><span>運動は月1回</span><span>自宅・道具なし</span></div></div></div>
+        <ol class="comic-strip" aria-label="FormMateの使い方を4コマで表した例（48歳男性）">
+          <li class="comic-panel"><span class="comic-number">1</span>
+            <div class="panel-screen input-screen"><span class="screen-label">INPUT</span>
+              <div class="screen-row"><span>身長</span><strong>172cm</strong></div>
+              <div class="screen-row"><span>体重</span><strong>78kg</strong></div>
+              <div class="screen-photo">📷 正面・横の写真</div>
+            </div>
+            <strong class="panel-caption">入力する</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">2</span>
+            <div class="panel-screen result-screen"><span class="screen-label">RESULT ・サンプル</span>
+              <div class="screen-badge">体力レベルの目安：初級</div>
+              <div class="screen-badge">姿勢の傾向：やや前かがみ</div>
+              <div class="screen-recommend">おすすめ：椅子スクワット 5回</div>
+            </div>
+            <strong class="panel-caption">提案を見る</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">3</span>
+            <div class="panel-screen compare-screen"><span class="screen-label">COMPARE</span>
+              <div class="compare-row"><div class="compare-thumb">あなた</div><div class="compare-thumb">お手本</div></div>
+              <div class="compare-note">肘の角度を比べてみよう</div>
+            </div>
+            <strong class="panel-caption">比べる</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">4</span>
+            <div class="panel-screen advice-screen"><span class="screen-label">ADVICE</span>
+              <div class="advice-bubble">肘を少し体側へ。<br>次は5回、ゆっくり動こう。</div>
+            </div>
+            <strong class="panel-caption">次を決める</strong>
+          </li>
+        </ol>
+        <p class="self-check-concept">体力レベル・姿勢の表示はサンプルです。実際の身体を診断するものではありません。<a class="self-check-cta" href="#demo" data-testid="self-check-demo">この体験を見る <span aria-hidden="true">↗</span></a></p>
+      </div>
+      <div class="self-check-layout">
+        <div class="self-check-intro"><p class="eyebrow">USE CASE / 02</p><div class="scenario-card"><span>30代・子育て中の主婦</span><strong>まとまった時間が取れない。<br>家事をしながら動きたい。</strong><div class="scenario-profile"><span>自由時間：15分未満</span><span>家事の合間に</span><span>子どもと在宅</span></div></div></div>
+        <ol class="comic-strip" aria-label="FormMateの使い方を4コマで表した例（30代主婦・ながら運動）">
+          <li class="comic-panel"><span class="comic-number">1</span>
+            <div class="panel-screen input-screen"><span class="screen-label">INPUT</span>
+              <div class="screen-row"><span>よくする行動</span><strong>料理・洗濯中</strong></div>
+              <div class="screen-row"><span>使える時間</span><strong>3分ずつ</strong></div>
+              <div class="screen-photo">🔈 音は出せない</div>
+            </div>
+            <strong class="panel-caption">入力する</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">2</span>
+            <div class="panel-screen result-screen"><span class="screen-label">RESULT ・サンプル</span>
+              <div class="screen-badge">提案タイプ：ながら運動</div>
+              <div class="screen-badge">合わせる行動：料理中</div>
+              <div class="screen-recommend">おすすめ：片足立ち 20秒×2</div>
+            </div>
+            <strong class="panel-caption">提案を見る</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">3</span>
+            <div class="panel-screen compare-screen"><span class="screen-label">COMPARE</span>
+              <div class="compare-row"><div class="compare-thumb">あなた</div><div class="compare-thumb">お手本</div></div>
+              <div class="compare-note">グラつきを比べてみよう</div>
+            </div>
+            <strong class="panel-caption">比べる</strong>
+          </li>
+          <li class="comic-arrow" aria-hidden="true">→</li>
+          <li class="comic-panel"><span class="comic-number">4</span>
+            <div class="panel-screen advice-screen"><span class="screen-label">ADVICE</span>
+              <div class="advice-bubble">グラついたら、まず10秒から。<br>次は洗い物中に試そう。</div>
+            </div>
+            <strong class="panel-caption">次を決める</strong>
+          </li>
+        </ol>
+        <p class="self-check-concept">「ながら運動」の提案はサンプルです。安全な場所・姿勢で行ってください。<a class="self-check-cta" href="#demo" data-testid="self-check-demo-2">この体験を見る <span aria-hidden="true">↗</span></a></p>
+      </div>
+    </section>
 
     <section class="closing wrap"><svg viewBox="0 0 40 40" aria-hidden="true"><use href="#spark"/></svg><p class="eyebrow">YOUR NEXT CHAPTER STARTS SMALL.</p><h2>今日の一歩が、<br>好きな自分につながっていく。</h2><p>憧れのお手本と、同じ目標の仲間と。<br>フォームメイトで、新しい続け方を。</p><a class="button" href="#demo" data-testid="closing-demo">体験イメージを見てみる <span aria-hidden="true">↗</span></a><span class="quiet-label">登録不要の紹介デモ / サービス開発中</span></section>
   </main>
